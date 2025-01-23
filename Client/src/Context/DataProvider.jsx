@@ -4,7 +4,7 @@ export const DataContext = createContext(null);
 
 const DataProvider = ({ children }) => {  // Fix typo here
 
-  const backendUrl = "http://localhost:5000";
+  const backendUrl = "https://consultancy-backend-rdmf.onrender.com";
 
   // ----------------------------------------------------------------------------
   
