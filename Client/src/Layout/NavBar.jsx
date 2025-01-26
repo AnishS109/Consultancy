@@ -1,152 +1,86 @@
-import React, { useContext, useState } from "react";
-import { AppBar, Box, Button, Drawer, Toolbar, Typography, List, ListItem, ListItemText, IconButton, Dialog, DialogContent, DialogActions, ListItemIcon } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { DataContext } from "../Context/DataProvider";
-import MenuIcon from '@mui/icons-material/Menu'; 
-import HomeIcon from '@mui/icons-material/Home'; 
-import InfoIcon from '@mui/icons-material/Info'; 
-import ContactMailIcon from '@mui/icons-material/ContactMail'; 
-import PersonAddIcon from '@mui/icons-material/PersonAdd'; 
-import LoginIcon from '@mui/icons-material/Login'; 
-import ExitToAppIcon from '@mui/icons-material/ExitToApp'; 
+import React from "react";
+import { AppBar, Box, Toolbar, Typography, TextField, InputAdornment, Button, Avatar } from "@mui/material";
+import { Search as SearchIcon, Menu as MenuIcon, CardGiftcard as CardGiftcardIcon } from '@mui/icons-material';
+
+import img from "../assets/Student.jpg";
 
 const Navbar = () => {
-  const navigate = useNavigate();
-  const { account, setAccount } = useContext(DataContext);
-
-  const [open, setOpen] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
-  const Logo =
-    "https://instadotanalytics.com/wp-content/uploads/2023/05/WhatsApp_Image_2024-07-11_at_15.57.22_70256fed-removebg-preview.png";
-
-  const handleLogoutClick = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerToggle = () => {
-    setDrawerOpen(!drawerOpen);
-  };
-
-  const isActive = (path) => {
-    return window.location.pathname === path ? "active" : "";
-  };
 
   return (
     <Box>
-      <AppBar position="static" sx={{ backgroundColor: "#1976d2", mb: "5px", transition: "background-color 0.3s ease" }}>
+      <AppBar
+        position="static"
+        sx={{
+          backgroundColor: "#fff",
+          mb: "5px",
+          transition: "background-color 0.3s ease",
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)"
+        }}
+      >
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingX: { xs: 1, sm: 3 },
+            position: "relative"
+          }}
+        >
 
-        <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingX: { xs: 1, sm: 3 }, position: "relative" }}>
+{/* -------------------------------------------------------------------------------------- */}
 
-          {/* ----- IDA LOGO ----- */}
+          <Box className="flex items-center gap-4 sm:gap-0 sm:justify-between w-full sm:w-[80%]">
 
-          <Box sx={{ height: { xs: "40px", sm: "60px", md: "60px" }, width: { xs: "150px", sm: "180px", md: "200px" }, borderRadius: "20px", bgcolor: "#e0f7fa", display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <img src={Logo} alt="Logo" style={{ maxHeight: "100%", maxWidth: "100%", objectFit: "contain" }} />
+            <Typography className="text-black text-[1.5rem] font-semibold">
+              Logo
+            </Typography>
+
+{/* -------------------------------------------------------------------------------------- */}
+
+            <Box className="hover:border-[1px] border-[1px] hover:border-black rounded-[50%] transition-all p-[3px]">
+            <SearchIcon className="sm:hidden text-black cursor-pointer" />
+            </Box>
+
+
+            <TextField
+              variant="outlined"
+              placeholder="Search here"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start" className="cursor-pointer">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+                style: { borderRadius: "30px", height: "6vh" }
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "30px",
+                  height: "6vh"
+                },
+              }}
+              className="hidden sm:block sm:mr-2 md:mr-0"
+            />
           </Box>
 
-          {/* ----- MENU BUTTON (for mobile) ----- */}
-
-          <IconButton color="inherit" sx={{ display: { xs: "block", sm: "block", md:"none" }, transition: "all 0.3s ease" }} onClick={handleDrawerToggle}>
-            <MenuIcon />
-          </IconButton>
-
-          {/* ----- Desktop Navigation Links ----- */}
-
-          <Box sx={{ display: { xs: "none", sm: "none", md:"flex" }, gap: "20px" }}>
+{/* -------------------------------------------------------------------------------------- */}
+          <Box className="flex items-center justify-between gap-2 sm:gap-6 text-nowrap">
             <Button
-              color="inherit"
-              onClick={() => navigate("/")}
-              className={`transition-colors duration-300 ease-in-out ${isActive("/") ? 'bg-white text-blue-700 font-bold' : 'hover:bg-white hover:text-blue-700 hover:font-bold'} px-4 py-2 rounded-lg`}
+              className="text-white normal-case h-[5vh] sm:h-[6vh] bg-black font-bold text-[1rem] sm:text-[1.2rem]"
+              startIcon={<CardGiftcardIcon />}
             >
-              Home
+              Sign up
             </Button>
-            <Button
-              color="inherit"
-              onClick={() => navigate("/about")}
-              className={`transition-colors duration-300 ease-in-out ${isActive("/about") ? 'bg-white text-blue-700 font-bold' : 'hover:bg-white hover:text-blue-700 hover:font-bold'} px-4 py-2 rounded-lg`}
-            >
-              About
-            </Button>
-            <Button
-              color="inherit"
-              onClick={() => navigate("/contact-us")}
-              className={`transition-colors duration-300 ease-in-out ${isActive("/contact-us") ? 'bg-white text-blue-700 font-bold' : 'hover:bg-white hover:text-blue-700 hover:font-bold  '} px-4 py-2 rounded-lg`}
-            >
-              Contact Us
-            </Button>
-                <Button
-                  color="inherit"
-                  onClick={() => navigate("/Register")}
-                  className={`transition-colors duration-300 ease-in-out ${isActive("/Register") ? 'bg-white text-blue-700 font-bold' : 'hover:bg-white hover:text-blue-700 hover:font-bold  '} px-4 py-2 rounded-lg`}
-                >
-                  Register
-                </Button>
-                <Button
-                  color="inherit"
-                  onClick={() => navigate("/login")}
-                  className="transition-colors duration-300 ease-in-out hover:bg-white hover:text-blue-700 hover:font-bold px-4 py-2 rounded-lg"
-                >
-                  Login
-                </Button>
+
+{/* -------------------------------------------------------------------------------------- */}
+
+            <Box className="flex items-center justify-around border-stone-200 p-2 border-2 h-[50px] rounded-3xl cursor-pointer">
+              <Avatar src={img} className="text-xl" />
+              <MenuIcon className="text-black text-[20px]" />
+            </Box>
           </Box>
         </Toolbar>
       </AppBar>
-
-      {/* ----- Drawer for Mobile ----- */}
-      <Drawer
-        anchor="right"
-        open={drawerOpen}
-        onClose={handleDrawerToggle}
-        sx={{
-          "& .MuiDrawer-paper": {
-            backgroundColor: "#e9f3fd",
-            color: "white",
-            width: 250,
-            padding: "10px",
-            transition: "transform 0.3s ease",
-          },
-        }}
-      >
-        <Box sx={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
-          <img src={Logo} alt="Logo" style={{ maxHeight: "60px", objectFit: "contain" }} />
-        </Box>
-
-        <Box className="border-b-2 border-[#1976d2]"></Box>
-
-        <List>
-          <ListItem button onClick={() => navigate("/")}>
-            <ListItemIcon sx={{ color: "#1976d2" }}>
-              <HomeIcon />
-            </ListItemIcon>
-            <ListItemText primary="Home" sx={{ color: "#1976d2" }} />
-          </ListItem>
-          <ListItem button onClick={() => navigate("/about")}>
-            <ListItemIcon sx={{ color: "#1976d2" }}>
-              <InfoIcon />
-            </ListItemIcon>
-            <ListItemText primary="About" sx={{ color: "#1976d2" }} />
-          </ListItem>
-          <ListItem button onClick={() => navigate("/contact-us")}>
-            <ListItemIcon sx={{ color: "#1976d2" }}>
-              <ContactMailIcon />
-            </ListItemIcon>
-            <ListItemText primary="Contact Us" sx={{ color: "#1976d2" }} />
-          </ListItem>
-              <ListItem button onClick={() => navigate("/register")}>
-                <ListItemIcon sx={{ color: "#1976d2" }}>
-                  <PersonAddIcon />
-                </ListItemIcon>
-                <ListItemText primary="Register" sx={{ color: "#1976d2" }} />
-              </ListItem>
-              <ListItem button onClick={() => navigate("/login")}>
-                <ListItemIcon sx={{ color: "#1976d2" }}>
-                  <LoginIcon />
-                </ListItemIcon>
-                <ListItemText primary="Login" sx={{ color: "#1976d2" }} />
-              </ListItem>
-        </List>
-      </Drawer>
-
     </Box>
   );
 };

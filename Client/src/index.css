@@ -11,4 +11,6 @@
 html,body{
   height: 100%;
   width: 100%;
+  overflow-x: hidden;
+  /* color: rgb(26, 26, 26); */
 }

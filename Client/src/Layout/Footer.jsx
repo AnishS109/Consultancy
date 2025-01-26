@@ -1,161 +1,74 @@
 import React from "react";
-import { Box, Typography, Grid, Link } from "@mui/material";
-import RoomIcon from "@mui/icons-material/Room";
-import PhoneIcon from "@mui/icons-material/Phone";
-import EmailIcon from "@mui/icons-material/Email";
-import LanguageIcon from "@mui/icons-material/Language";
+import { Box, Typography } from "@mui/material";
+
+import StarIcon from '@mui/icons-material/Star';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 const Footer = () => {
   return (
     <Box
+      className="w-screen h-auto"
       sx={{
-        backgroundColor: "#1976d2",
+        backgroundColor: "rgb(21, 21, 21)",
         color: "white",
-        padding: { xs: "20px 10px", sm: "20px 10px" },
-        mt: "20px",
+        padding: { xs: "20px 10px", sm: "20px 20px" },
+        mt: "5px",
         position: "relative",
       }}
     >
-      <Grid container spacing={4} sx={{ justifyContent: "center" }}>
-        {/*---------Address Section---------*/}
-        <Grid item xs={12} sm={6} md={4}>
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: "bold",
-              mb: 2,
-              display: "flex",
-              alignItems: "center",
-              fontSize: { xs: "1rem", sm: "1.4rem" },
-            }}
-          >
-            <RoomIcon sx={{ mr: 1 }} /> Address
-          </Typography>
+      {/* -------------------------------------------------------------------------------------- */}
+      
+      <Box className="flex flex-col sm:flex-row justify-between py-6 sm:py-12 px-6 sm:px-16">
+        {/* Logo */}
+        <Box className="mb-6 sm:mb-0">
+          <Typography className="text-4xl sm:text-[70px] font-bold">IDA LOGO</Typography>
+        </Box>
 
-          <Typography
-            variant="body2"
-            sx={{
-              lineHeight: 1.8,
-              fontSize: { xs: "0.9rem", sm: "1rem" }, // Adjust font size for mobile
-            }}
-          >
-            P13-14, H3 Ground Floor, <br />
-            B-block Metro Tower, <br />
-            Near Mangal City Mall, <br />
-            Satya Sai Square, Vijay Nagar, <br />
-            Indore, M.P. 451010
-          </Typography>
-        </Grid>
+        {/* Links */}
+        <Box className="flex flex-col sm:flex-row gap-8 sm:gap-14">
+          <Box className="flex flex-col gap-4">
+            <Box className="hover:text-gray-300 cursor-pointer">About</Box>
+            <Box className="hover:text-gray-300 cursor-pointer">Contact Us</Box>
+            <Box className="hover:text-gray-300 cursor-pointer">Terms Of Service</Box>
+            <Box className="hover:text-gray-300 cursor-pointer">Privacy</Box>
+          </Box>
+          <Box className="flex flex-col gap-4">
+            <Box className="hover:text-gray-300 cursor-pointer">Pricing</Box>
+            <Box className="hover:text-gray-300 cursor-pointer">Box</Box>
+          </Box>
+        </Box>
+      </Box>
 
-        {/*------------Contact Section--------*/}
-        <Grid item xs={12} sm={6} md={4}>
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: "bold",
-              mb: 2,
-              display: "flex",
-              alignItems: "center",
-              fontSize: { xs: "1rem", sm: "1.4rem" },
-            }}
-          >
-            <PhoneIcon sx={{ mr: 1 }} /> Contact Us
-          </Typography>
+      {/* -------------------------------------------------------------------------------------- */}
 
-          <Typography
-            variant="body2"
-            sx={{
-              lineHeight: 1.8,
-              fontSize: { xs: "0.9rem", sm: "1rem" },
-            }}
-          >
-            Phone: <br />
-            +91 99811 21214 <br />
-            +91 99811 21215
-          </Typography>
+      <Box className="px-6 sm:px-16 mb-8">
+        <Box className="flex flex-nowrap items-center border-[1px] border-white p-4 w-fit rounded-[30px] cursor-pointer hover:bg-gray-700">
+          <StarIcon className="text-[1.4rem] mr-3 text-yellow-500" />
+          <Typography className="text-sm sm:text-[1.1rem]">Top Profiles <KeyboardArrowDownIcon /></Typography>
+        </Box>
+      </Box>
 
-          <Typography
-            variant="body2"
-            sx={{
-              mt: 1,
-              display: "flex",
-              alignItems: "center",
-              fontSize: { xs: "0.9rem", sm: "1rem" },
-            }}
-          >
-            <EmailIcon sx={{ mr: 1 }} />
-            <Link
-              href="mailto:contact@instadotanalytics.com"
-              underline="hover"
-              sx={{
-                color: "#e0f7fa",
-                fontSize: { xs: "0.9rem", sm: "1rem" },
-              }}
-            >
-              contact@instadotanalytics.com
-            </Link>
-          </Typography>
-        </Grid>
+      {/* -------------------------------------------------------------------------------------- */}
 
-        {/* ---------VISIT US Section--------*/}
-        <Grid item xs={12} sm={12} md={4}>
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: "bold",
-              mb: 2,
-              display: "flex",
-              alignItems: "center",
-              fontSize: { xs: "1rem", sm: "1.4rem" },
-            }}
-          >
-            <LanguageIcon sx={{ mr: 1 }} /> Visit Us
+      <Box className="px-6 sm:px-16 sm:pr-28 mb-12 flex flex-col sm:flex-row justify-between items-center sm:items-start">
+        <Box className="text-center sm:text-left">
+          <Typography className="mt-4 text-sm sm:text-base">
+            548 Market St PMB 30073, San Francisco
           </Typography>
-
-          <Typography
-            variant="body2"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              lineHeight: 1.8,
-              fontSize: { xs: "0.9rem", sm: "1rem" },
-            }}
-          >
-            <LanguageIcon sx={{ mr: 1 }} />
-            <Link
-              href="https://www.instadotanalytics.com"
-              target="_blank"
-              underline="hover"
-              sx={{
-                color: "#e0f7fa",
-                fontSize: { xs: "0.9rem", sm: "1rem" },
-              }}
-            >
-              www.instadotanalytics.com
-            </Link>
+          <Typography className="mt-2 text-sm sm:text-base">
+            ©2025 Topmate
           </Typography>
-        </Grid>
-      </Grid>
+        </Box>
 
-      {/* All Rights Reserved Section */}
-      <Box
-        sx={{
-          textAlign: "center",
-          mt: 4,
-          pt: 2,
-          borderTop: "1px solid #e0f7fa", // Separator line
-        }}
-      >
-        <Typography
-          variant="body2"
-          sx={{
-            fontFamily: "Roboto, sans-serif",
-            fontSize: { xs: "0.8rem", sm: "1rem" },
-            color: "#e0f7fa",
-          }}
-        >
-          &copy; {new Date().getFullYear()} Insta Dot Analytics. All Rights Reserved.
-        </Typography>
+        {/* Social Media Section */}
+        <Box className="flex gap-4 mt-4 sm:mt-0">
+          <LinkedInIcon className="text-[2rem] sm:text-[3rem] cursor-pointer hover:text-blue-500" />
+          <TwitterIcon className="text-[2rem] sm:text-[3rem] cursor-pointer hover:text-blue-400" />
+          <InstagramIcon className="text-[2rem] sm:text-[3rem] cursor-pointer hover:text-pink-500" />
+        </Box>
       </Box>
     </Box>
   );
