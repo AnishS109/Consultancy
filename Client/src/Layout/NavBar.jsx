@@ -8,6 +8,7 @@ const Navbar = () => {
 
   return (
     <Box>
+
       <AppBar
         position="static"
         sx={{
@@ -17,6 +18,7 @@ const Navbar = () => {
           boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)"
         }}
       >
+        
         <Toolbar
           sx={{
             display: "flex",
@@ -78,9 +80,13 @@ const Navbar = () => {
               <Avatar src={img} className="text-xl" />
               <MenuIcon className="text-black text-[20px]" />
             </Box>
+
           </Box>
+
         </Toolbar>
+
       </AppBar>
+
     </Box>
   );
 };

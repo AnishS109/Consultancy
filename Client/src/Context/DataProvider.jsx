@@ -2,9 +2,9 @@ import { createContext, useEffect, useState } from "react";
 
 export const DataContext = createContext(null);
 
-const DataProvider = ({ children }) => {  // Fix typo here
+const DataProvider = ({ children }) => {  
 
-  const backendUrl = "https://consultancy-backend-rdmf.onrender.com";
+  const backendUrl = "http://localhost:5000";
 
   // ----------------------------------------------------------------------------
   
@@ -17,10 +17,7 @@ const DataProvider = ({ children }) => {  // Fix typo here
     if (account) {
       sessionStorage.setItem("account", JSON.stringify(account));
     }
-  }, [account]);
-
-  // console.log(account);
-  
+  }, [account]);  
   
   // ----------------------------------------------------------------------------
 

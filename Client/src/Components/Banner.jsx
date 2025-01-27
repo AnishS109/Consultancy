@@ -11,11 +11,11 @@ const Banner = () => {
 
   return (
     <>
-      <Box className="w-screen h-auto md:h-[55vh] bg-[#F2EBE1] flex items-center flex-col text-center p-4">
+      <Box className="w-screen h-auto md:h-[55vh] bg-[#f4ebe2] flex items-center flex-col text-center p-4">
 
 {/*--------------------------------------------------------------------------------------*/}
 
-        <Box className="flex items-center justify-between w-[80vw] md:w-fit rounded-[30px] p-2 h-16 bg-[#e5ded1] mt-6 md:mt-10">
+        <Box className="flex items-center justify-between w-[80vw] md:w-fit rounded-[30px] p-2 h-16 bg-[#e3d7bf] mt-6 md:mt-10">
           <Box
             onClick={() => setPeopleButton(true)}
             className={`${
