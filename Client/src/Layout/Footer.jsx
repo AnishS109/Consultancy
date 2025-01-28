@@ -10,7 +10,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 const Footer = () => {
   return (
     <Box
-      className="w-screen h-auto"
+      className="w-screen h-auto mt-12"
       sx={{
         backgroundColor: "rgb(21, 21, 21)",
         color: "white",

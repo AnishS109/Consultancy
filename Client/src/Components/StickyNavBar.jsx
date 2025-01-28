@@ -1,7 +1,6 @@
 import React from 'react'
 import { Box, Button, Typography } from "@mui/material"
 
-import img2 from "../assets/images.jpg"
 
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';

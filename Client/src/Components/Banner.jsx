@@ -79,7 +79,7 @@ const Banner = () => {
 
         <Box className="flex flex-nowrap md:flex-row gap-1 md:gap-4 mt-5 w-full md:w-[40vw] justify-center md:justify-center">
 
-          <Box className="flex flex-nowrap h-14 items-center p-2 border-[1px] border-black rounded-[30px] w-auto">
+          <Box className="flex flex-nowrap h-12 items-center border-[1px] border-black rounded-[30px] w-auto">
             <AvatarGroup max={4}>
               <Avatar alt="Remy Sharp" src={img2} />
               <Avatar alt="Travis Howard" src={img2} />
@@ -91,7 +91,7 @@ const Banner = () => {
             </Typography>
           </Box>
 
-          <Box className="flex flex-nowrap items-center h-14 p-2 border-[1px] border-black rounded-[30px] w-auto">
+          <Box className="flex flex-nowrap items-center h-12 p-2 border-[1px] border-black rounded-[30px] w-auto">
             <StarIcon className="text-yellow-500 text-[20px] md:text-[30px]" />
             <Typography className="text-sm md:text-[20px] ml-2 text-nowrap">
               <span className="font-bold">4.9/5</span> Rated

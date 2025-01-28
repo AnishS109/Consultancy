@@ -2,9 +2,7 @@ import React from "react";
 import Layout from "../Layout/Layout";
 import Banner from "../Components/Banner";
 import StickyNavBar from "../Components/StickyNavBar";
-import { Box } from "@mui/material";
-import HomeCards from "../ReusableComp/HomeCards";
-import MarqueeEffect from "../Components/MarqueeEffect";
+import LookingFor from "../Components/LookingFor";
 
 const Home = () => {
 
@@ -13,6 +11,7 @@ const Home = () => {
 
       <Banner/>
       <StickyNavBar/>
+      <LookingFor/>
 
     </Layout>
   );
