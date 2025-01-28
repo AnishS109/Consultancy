@@ -7,7 +7,7 @@ const WebinarCard = () => {
   return (
     <>
 
-    <Box className="h-[320px] w-[330px] sm:w-[280px] border-[1px] rounded-[30px]">
+    <Box className="h-[320px] w-[330px] sm:w-[280px] border-[2px] rounded-[30px] bg-white">
 
       <Box className="flex flex-nowrap bg-[#fff6f2] p-2 gap-2 rounded-t-[30px]">
         <Avatar src={img} alt='Image'/>

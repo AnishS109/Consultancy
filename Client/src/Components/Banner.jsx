@@ -38,7 +38,7 @@ const Banner = () => {
             } flex-1 flex justify-center text-nowrap items-center p-3 rounded-3xl cursor-pointer transition-all`}
           >
             <Typography
-              className={`font-semibold text-sm md:text-[15px] ${
+              className={`font-bold text-sm md:text-[15px] ${
                 !peopleButton ? "text-black" : "text-black"
               }`}
             >
