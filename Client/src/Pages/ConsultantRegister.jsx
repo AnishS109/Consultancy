@@ -1,222 +1,287 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { TextField, Button, Typography, Box, CircularProgress } from '@mui/material';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { DataContext } from '../Context/DataProvider';
-import axios from 'axios';
+import React, { useContext, useEffect, useState } from "react";
+import { Box, Typography, TextField, Button, CircularProgress } from "@mui/material";
+import { NavLink, useNavigate } from "react-router-dom"
+import axios from "axios"
+import { DataContext } from "../Context/DataProvider";
 
-const ConsultantRegister = () => {
+import SignUpImage from "../assets/SignUpImage.svg"
+import googleImg from "../assets/google.svg"
+import LinkedinImg from "../assets/linkedin.svg"
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-  const {backendUrl} = useContext(DataContext)
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
 
-  const [errorMsg, setErrorMsg] = useState("")
-  const [successMsg, setSuccessMsg] = useState("")
-  const [loading, setLoading] = useState(false)
+  const ConsultantRegister = () => {
 
-  const navigate = useNavigate()
-
-  const [formData, setFormData] = useState({
-    name: '',
-    username:"",
-    email: '',
-    password: '',
-    country: '',
-    university: '',
-    courseMajor: '',
-    examDetails: '',
-    role:"Consultant"
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  useEffect(() => {
-    setErrorMsg("")
-  },[formData])
-
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-    setLoading(true)
-    console.log(formData);
+    const {backendUrl } = useContext(DataContext)
     
+    // ---------------------------------------------------------------------------
+    
+    const [errorMsg, setErrorMsg] = useState("")
+    const [loading, setLoading] = useState(false)
+    const [showPassword, setShowPassword] = useState(false);
 
-    try {
-      const response = await axios.post(`${backendUrl}/Consultant/Register`, formData)
+    const navigate = useNavigate()
 
-      if(response.status === 200){
-        setErrorMsg("")
-        setSuccessMsg("Successfully Registered")
-        setTimeout(() => {
-          navigate("/login")
-        },1000)
-      }
-    } catch (error) {
-      setErrorMsg(error.response?.data?.message || "Error while registering, Please try again later")
-    } finally {
-      setLoading(false)
+    // ---------------------------------------------------------------------------
+    
+    const [formdata, setFormData] = useState({
+      name:"",
+      email:"",
+      password:"",
+      role:"Consultant"
+    })
+    
+    // ---------------------------------------------------------------------------
+
+    useEffect(() => {
+      setErrorMsg("")
+    },[formdata])
+    
+    // ---------------------------------------------------------------------------
+
+    const handleChange = (e) => {
+      const {name, value} = e.target
+      setFormData({...formdata, [name]:value})
     }
-  };
 
-  return (
-    <Box className="flex justify-center items-center h-screen p-4 bg-gray-100">
-      <Box className="w-full max-w-md bg-white p-6 rounded-xl shadow-lg">
-        <Typography variant="h5" className="font-bold text-center mb-6">
-          Consultant Registration
+    // ---------------------------------------------------------------------------
+    
+    const handleSubmit = async (e) => {
+      e.preventDefault()
+
+      setLoading(true)
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!emailRegex.test(formdata.email)) {
+        setLoading(false);
+        setErrorMsg("Please enter a valid email address.");
+        return;
+      }
+      
+      if(formdata.password.length < 8){
+        setLoading(false)
+        setErrorMsg("Password must be 8 character long.")
+        return
+      }
+
+      try {
+        const response = await axios.post(`${backendUrl}/Consultant/Register`, formdata)
+        
+        if(response.status === 200){
+          setErrorMsg("")
+          setTimeout(() => {
+            navigate("/Login")
+          },1000)
+        }
+      } catch (error) {
+        setErrorMsg(error.response?.data?.message || "Error While Registering, Please Try again later!")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    // ---------------------------------------------------------------------------
+
+    const togglePasswordVisibility = () => {
+      setShowPassword((prev) => !prev);
+    };
+
+    // ---------------------------------------------------------------------------
+    return (
+      <>
+      <Box className="flex justify-between">
+
+{/* ------------------------------------------------------------------------------------- */}
+
+  <Box className="w-[700px] h-screen pl-2 sm:pl-28 md:pl-40 pr-10">
+
+{/* ------------------------------------------------------------------------------------- */}
+
+    <Box className="flex justify-between h-16 items-center">
+
+    <Typography className="text-[1.2rem] sm:text-[1.5rem] md:text-[1.8rem] font-bold">Logo IDA </Typography>
+    
+    <NavLink to={"/Login"}>
+    <Button 
+    variant="outlined"
+    className="text-black h-10 mr-10 border-black font-semibold hover:bg-black hover:text-white transition-all">
+      Login
+    </Button>
+    </NavLink>
+
+    </Box>
+
+    <Box className="w-screen border-b-[1px] h-2 sm:ml-[-160px]"></Box>
+{/* ------------------------------------------------------------------------------------- */}
+
+    <Box className="mt-6 sm:mt-10">
+      
+      <Box>
+      <Typography className="text-[1.2rem] tracking-tight sm:text-[1.3rem] md:text-[2.5rem] text-gray-700 font-bold">
+        Sign Up as Consultant
+      </Typography>
+      </Box>
+      
+      <Box className="flex flex-wrap justify-between sm:gap-4 mr-4 p-4 mt-5">
+      <Button 
+      variant="outlined"
+      className="flex normal-case h-10 items-center gap-2 border-2 border-black w-full sm:w-fit p-3 rounded-[8px] cursor-pointer">
+        <img
+        className="h-6" 
+        src={googleImg} alt="Google img"/>
+        <Typography 
+        className="text-gray-700 text-xs text-nowrap">
+          Continue with <span className="font-bold">Google</span>
         </Typography>
+      </Button>
 
-        {errorMsg && (
-          <Typography className="text-red-600 mb-4 text-center bg-red-100">
-            {errorMsg}
-          </Typography>
-        )}
-
-        {successMsg && (
-          <Typography className="text-green-600 mb-4 text-center bg-green-100">
-            {successMsg}
-          </Typography>
-        )}
-
-        <form onSubmit={handleSubmit}>
-          {/* Name */}
-          <TextField
-            label="Name"
-            required
-            variant="outlined"
-            fullWidth
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="mb-2 bg-gray-100"
-          />
-
-          {/* Email */}
-          <TextField
-            label="Email"
-            required
-            variant="outlined"
-            fullWidth
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="mb-2 bg-gray-100"
-          />
-
-          <TextField
-            label="Username"
-            required
-            variant="outlined"
-            fullWidth
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            className="mb-2 bg-gray-100"
-          />
-
-          {/* Password */}
-          <TextField
-            label="Password"
-            required
-            variant="outlined"
-            fullWidth
-            name="password"
-            type="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="mb-2 bg-gray-100"
-          />
-
-          {/* Country */}
-          <TextField
-            label="Country"
-            required
-            variant="outlined"
-            fullWidth
-            name="country"
-            value={formData.country}
-            onChange={handleChange}
-            className="mb-2 bg-gray-100"
-          />
-
-          {/* University/Institution Name */}
-          <TextField
-            label="University/Institution Name"
-            required
-            variant="outlined"
-            fullWidth
-            name="university"
-            value={formData.university}
-            onChange={handleChange}
-            className="mb-2 bg-gray-100"
-          />
-
-          {/* Course and Major */}
-          <TextField
-            label="Course and Major"
-            placeholder='(e.g., Masters in Computer Science)'
-            variant="outlined"
-            fullWidth
-            name="courseMajor"
-            value={formData.courseMajor}
-            onChange={handleChange}
-            className="mb-2 bg-gray-100"
-          />
-
-          {/* Exam Details */}
-          <TextField
-            label="Exam Details"
-            placeholder='(e.g., GRE: 320, TOEFL: 115)'
-            variant="outlined"
-            fullWidth
-            name="examDetails"
-            value={formData.examDetails}
-            onChange={handleChange}
-            className="mb-3 bg-gray-100"
-          />
-
-          {/* Submit Button */}
-          {loading ? (
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <CircularProgress color="primary" />
-          </Box>
-          ):(
-            <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            className="py-3 text-white"
-          >
-            Register
-          </Button>
-          )}
-        </form>
-
-        <Box fullWidth className="text-center mt-2">
-        <Typography sx={{ color: "black" }}>
-          <strong> Want to register as Student? </strong>
-            <NavLink to={"/Register"}>
-              <Button><strong>Click here</strong></Button>
-            </NavLink>
+      <Button 
+      variant="outlined"
+      className="flex normal-case mt-3 sm:mt-0 h-10 items-center gap-2 border-2 border-black w-full sm:w-fit p-3 rounded-[8px] cursor-pointer">
+        <img
+        className="h-6" 
+        src={LinkedinImg} alt="linkedIn img"/>
+        <Typography 
+        className="text-gray-700 text-xs text-nowrap">
+          Continue with <span className="font-bold">LinkedIn</span>
         </Typography>
-        </Box>
+      </Button>
+      </Box>
 
-        <Box fullWidth className="text-center mt-1">
-        <Typography sx={{ color: "black" }}>
-            Already have an account?
-            <NavLink to={"/login"}>
-              <Button>Sign in</Button>
-            </NavLink>
+      <Box className="border-b-[1px] h-1 mt-6 mr-4"></Box>
+
+      {errorMsg && (
+        <Typography className="text-red-600 font-bold text-center mt-2 bg-red-100 p-[3px] rounded-[6px]">
+          {errorMsg}
         </Typography>
-        </Box>
+      )}
+
+{/* ------------------------------------------------------------------------------------- */}
+   
+    <Box className="flex-col gap-3 flex-wrap items-center justify-center mt-4">
+
+    <Box className="mr-4">
+    <Typography className="text-black font-semibold mb-2">Full Name</Typography>
+    <TextField
+    value={formdata.name}
+    onChange={handleChange}
+    fullWidth
+    required
+    placeholder="Enter your full name"
+    variant="outlined"
+    name="name"
+    className="mb-5 bg-gray-100 rounded-lg"
+    sx={{
+      "& .MuiOutlinedInput-root": {
+        "&.Mui-focused fieldset": {
+          borderColor: "black", 
+        },
+      },
+      "& .MuiInputLabel-root.Mui-focused": {
+        color: "black", 
+      },
+    }} />
+    </Box>
+    
+    <Box className="mr-4">
+    <Typography className="text-black font-semibold mb-2">Email</Typography>
+    <TextField
+    type="email"
+    value={formdata.email}
+    onChange={handleChange}
+    fullWidth
+    required
+    placeholder="Enter your email"
+    variant="outlined"
+    name="email"
+    className="mb-5 bg-gray-100 rounded-lg"
+    sx={{
+      "& .MuiOutlinedInput-root": {
+        "&.Mui-focused fieldset": {
+          borderColor: "black", 
+        },
+      },
+      "& .MuiInputLabel-root.Mui-focused": {
+        color: "black", 
+      },
+    }} />
+    </Box>
+    
+    <Box className="mr-4">
+    <Typography className="text-black font-semibold mb-2">Password</Typography>
+    <TextField
+    value={formdata.password}
+    onChange={handleChange}
+    type={showPassword ? "text" : "password"}
+    fullWidth
+    required
+    placeholder="Enter your password"
+    variant="outlined"
+    name="password"
+    className="mb-5 bg-gray-100 rounded-lg"
+    sx={{
+      "& .MuiOutlinedInput-root": {
+        "&.Mui-focused fieldset": {
+          borderColor: "black",
+        },
+      },
+      "& .MuiInputLabel-root.Mui-focused": {
+        color: "black",
+      },
+    }}
+    InputProps={{
+      endAdornment: (
+        <InputAdornment position="end">
+          <IconButton onClick={togglePasswordVisibility} edge="end">
+            {showPassword ? <VisibilityOff /> : <Visibility />}
+          </IconButton>
+        </InputAdornment>
+      ),
+    }}
+    />
+    </Box>
+    
+    <Box className="mr-4">
+    {loading ? (
+    <Box className="flex items-center justify-center">
+      <CircularProgress className="text-black"/>
+    </Box>
+    ) : (
+      <Button
+      onClick={handleSubmit}
+      variant="contained"
+      disabled={!formdata.name || !formdata.email || !formdata.password}
+      className="text-white font-bold bg-black normal-case w-full rounded-[6px] h-10">
+        Get Started
+      </Button>
+    )}
+    </Box>
+    
+    <Box className="mr-20">
+    <Typography className="text-gray-500 mt-3 text-[13px] sm:text-[17px] text-wrap">
+    By Signing up, you agree to our <span className="underline hover:text-black cursor-pointer">Terms of Use</span> and <span className="underline hover:text-black cursor-pointer">Privacy Policy</span> 
+    </Typography>
+    </Box>
+
+     </Box>
+
+    </Box>
+
+  </Box>
+
+{/* ------------------------------------------------------------------------------------- */}
+        <img 
+        className="h-screen hidden md:block md:w-[42vw]"
+        src={SignUpImage} alt="Image" />
 
       </Box>
-    </Box>
-  );
-};
+
+      </>
+    );
+  };
 
 export default ConsultantRegister;

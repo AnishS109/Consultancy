@@ -11,9 +11,9 @@ const StudentHome = lazy(() => import("./Student/StudentHome"));
 const AdminHome = lazy(() => import("./Admin/AdminHome"));
 const StudentRegister = lazy(() => import("./Pages/StudentRegister"));
 const ConsultantRegister = lazy(() => import("./Pages/ConsultantRegister"));
-const ContactUs = lazy(() => import("./Pages/ContactUs"));
-const About = lazy(() => import("./Pages/About"));
-const Register = lazy(() => import("./Pages/Register"));
+// const ContactUs = lazy(() => import("./Pages/ContactUs"));
+// const About = lazy(() => import("./Pages/About"));
+// const Register = lazy(() => import("./Pages/Register"));
 
 function App() {
   
@@ -49,9 +49,6 @@ function App() {
             <Route path="/ForgotPassword" element={<ForgotPassword />} />
             <Route path="/Student/Register" element={<StudentRegister />} />
             <Route path="/Consultant/Register" element={<ConsultantRegister />} />
-            <Route path="/contact-us" element={<ContactUs />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/Register" element={<Register />} />
             <Route path="/ForgotPassword" element={<ForgotPassword />} />
 
             {/* ------------------- PROTECTED ROUTES ----------------------- */}

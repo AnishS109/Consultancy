@@ -1,12 +1,34 @@
-import React from "react";
-import { AppBar, Box, Toolbar, Typography, TextField, InputAdornment, Button, Avatar } from "@mui/material";
+import React, { useState } from "react";
+import { AppBar, Box, Toolbar, Typography, TextField, InputAdornment, Button, Avatar, Drawer, Divider } from "@mui/material";
 import { Search as SearchIcon, Menu as MenuIcon, CardGiftcard as CardGiftcardIcon } from '@mui/icons-material';
 
 import img from "../assets/Student.jpg";
+import { useNavigate } from "react-router-dom";
+
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
 
 const Navbar = () => {
 
+  const navigate = useNavigate()
+
+  const today = new Date().toLocaleDateString("en-IN", {
+    weekday: "long",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+
+  const [drawerOpen, SetDrawerOpen] = useState(false)
+
+  const handleDrawerClose = () => {
+    SetDrawerOpen(!drawerOpen)
+  }
+
   return (
+    <>
     <Box>
 
       <AppBar
@@ -66,21 +88,15 @@ const Navbar = () => {
           </Box>
 
 {/* -------------------------------------------------------------------------------------- */}
-          <Box className="flex items-center justify-between gap-2 sm:gap-6 text-nowrap">
-            <Button
-              className="text-white normal-case h-[5vh] sm:h-[6vh] bg-black font-bold text-[1rem] sm:text-[1.2rem]"
-              startIcon={<CardGiftcardIcon />}
-            >
-              Sign up
-            </Button>
 
-{/* -------------------------------------------------------------------------------------- */}
+          <Box 
+          onClick={() => SetDrawerOpen(true)}
+          className="flex items-center justify-between gap-2 sm:gap-6 text-nowrap">
 
-            <Box className="flex items-center justify-around border-stone-200 p-2 border-2 h-[50px] rounded-3xl cursor-pointer">
+            <Box className="flex items-center justify-around border-stone-200 hover:border-gray-400 p-2 border-2 h-[50px] rounded-3xl cursor-pointer">
               <Avatar src={img} className="text-xl" />
               <MenuIcon className="text-black text-[20px]" />
             </Box>
-
           </Box>
 
         </Toolbar>
@@ -88,6 +104,110 @@ const Navbar = () => {
       </AppBar>
 
     </Box>
+
+{/* -------------------------------------------------------------------------------------- */}
+{/* -------------------------------------------------------------------------------------- */}
+{/* -------------------------------------------------------------------------------------- */}
+{/* -------------------------------------------------------------------------------------- */}
+{/* -------------------------------------------------------------------------------------- */}
+
+  <Drawer
+    anchor="right" 
+    open={drawerOpen}
+    onClose={handleDrawerClose} 
+    sx={{
+      "& .MuiDrawer-paper": {
+        width: {xs:"240px", sm:"320px"},
+        bgcolor: "white", 
+      },
+    }}
+  >
+
+  <Box className="flex flex-col items-center">
+
+{/* -------------------------------------------------------------------------------------- */}
+
+    <Typography className="text-black mt-10 text-[2rem] font-bold">Logo</Typography>
+    
+    <Box className="px-4 h-1 w-full mt-6">
+    <Box className="border-b-2 border-gray-300 h-1 w-full"></Box>
+    </Box>
+
+{/* -------------------------------------------------------------------------------------- */}
+
+    <Box className="flex flex-col w-[80%] mt-4">
+
+      <Typography className="font-semibold py-5 text-center text-black uppercase">For Seekers</Typography>
+
+      <Button 
+      startIcon={<LoginIcon />}
+      onClick={() => navigate("/login")}
+      className="text-black normal-case text-[1.1rem] hover:bg-gray-200">
+        Sign In
+      </Button>
+
+      <Button 
+      onClick={() => navigate("/Student/Register")}
+      startIcon={<LogoutIcon />}
+      className="text-black normal-case text-[1.1rem] hover:bg-gray-200">
+        Sign up
+      </Button>
+
+    </Box>
+
+{/* -------------------------------------------------------------------------------------- */}
+    <Box className="flex flex-col w-[80%]">
+
+      <Typography className="font-semibold py-5 text-center text-black uppercase">For Experts</Typography>
+
+      <Button 
+      startIcon={<LoginIcon />}
+      onClick={() => navigate("/login")}
+      className="text-black normal-case text-[1.1rem] hover:bg-gray-200">
+        Sign In
+      </Button>
+
+      <Button 
+      onClick={() => navigate("/Consultant/Register")}
+      startIcon={<LogoutIcon />}
+      className="text-black normal-case text-[1.1rem] hover:bg-gray-200">
+        Sign up
+      </Button>
+
+      <Button 
+      startIcon={<MonetizationOnIcon/>}
+      className="text-black normal-case text-[1.1rem] hover:bg-gray-200">
+        Pricing
+      </Button>
+      
+      <Button 
+      startIcon={<NoteAddIcon/>}
+      className="text-black normal-case text-[1.1rem] hover:bg-gray-200">
+        Start your page
+      </Button>
+
+    </Box>
+  </Box>
+{/* -------------------------------------------------------------------------------------- */}
+
+  <Box className="px-4 h-1 w-full mt-6 absolute bottom-0 mb-16">
+    <Box className="border-b-2 border-gray-300 h-1 w-full"></Box>
+  </Box>
+
+  <Box className="absolute bottom-0 ml-16 sm:ml-14 mb-5">
+
+    <Typography className="text-black font-bold text-[16px] sm:text-[18px]">
+      {today}
+    </Typography>
+
+  </Box>
+
+{/* -------------------------------------------------------------------------------------- */}
+
+</Drawer>
+
+
+    </>
   );
 };
 

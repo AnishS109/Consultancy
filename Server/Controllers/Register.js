@@ -4,17 +4,13 @@ import bcrypt from "bcryptjs"
 // ---------------------STUDENT REGISTRATION ---------------------------------
 
 export const studentRegister = async(req, res) => {
-  const {username, email, password, role, ...otherDetails} = req.body
+  const {name, email, password, role } = req.body
 
   if(role !== "Student"){
     return res.status(400).json({message:"Error While Registering. Try again later"})
   }
   
   try {
-    const usernameExist = await UserRegisterSchema.findOne({username})
-    if(usernameExist){
-      return res.status(400).json({message:"Username already Exist"})
-    }
 
     const emailExist = await UserRegisterSchema.findOne({email})
     if(emailExist){
@@ -24,11 +20,10 @@ export const studentRegister = async(req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10)
 
     const newUser = new UserRegisterSchema({
-      username, 
+      name, 
       email, 
       password:hashedPassword, 
-      role, 
-      ...otherDetails
+      role
       })
 
     await newUser.save()
@@ -44,17 +39,12 @@ export const studentRegister = async(req, res) => {
 // --------------------- CONSULTANT REGISTRATION ---------------------------------
 
 export const consultantRegister = async(req, res) => {
-  const {username, email, password, role, ...otherDetails} = req.body
+  const {name, email, password, role } = req.body
 
   if(role !== "Consultant"){
     return res.status(400).json({message:"Error While Registering. Try again later"})
   }
   try {
-
-    const usernameExist = await UserRegisterSchema.findOne({username})
-    if(usernameExist){
-      return res.status(400).json({message:"Username already Exist"})
-    }
 
     const emailExist = await UserRegisterSchema.findOne({email})
     if(emailExist){
@@ -64,11 +54,10 @@ export const consultantRegister = async(req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10)
 
     const newUser = new UserRegisterSchema({
-      username, 
+      name, 
       email, 
       password:hashedPassword, 
       role, 
-      ...otherDetails
       })
 
     await newUser.save()

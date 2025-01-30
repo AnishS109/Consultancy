@@ -10,7 +10,7 @@ const DataProvider = ({ children }) => {
   
   const [account, setAccount] = useState(() => {
     const savedAccount = sessionStorage.getItem("account");
-    return savedAccount ? JSON.parse(savedAccount) : { username: "", name: "", role: "", accesstoken:"", refreshtoken:"" };
+    return savedAccount ? JSON.parse(savedAccount) : { name: "", role: "", accesstoken:"", refreshtoken:"" };
   });
 
   useEffect(() => {
