@@ -3,6 +3,14 @@ import { BrowserRouter, Routes, Route, Outlet, Navigate } from "react-router-dom
 import { Box, CircularProgress } from "@mui/material";
 import DataProvider, { DataContext } from "./Context/DataProvider";
 
+import DashHome from "./Student/DashBoardPages/DashHome";
+import DashBookings from "./Student/DashBoardPages/DashBookings";
+import DashFind from "./Student/DashBoardPages/DashFind";
+import DashProfile from "./Student/DashBoardPages/DashProfile";
+import DashRewards from "./Student/DashBoardPages/DashRewards";
+import C_DashHome from "./Consult/ConsultPages/C_DashHome";
+import C_DashProfile from "./Consult/ConsultPages/C_DashProfile";
+
 const Home = lazy(() => import("./Pages/Home"));
 const Login = lazy(() => import("./Pages/Login"));
 const ForgotPassword = lazy(() => import("./Pages/ForgotPassword"));
@@ -19,17 +27,17 @@ function App() {
   
   const StudentRoutes = () => {
     const { account } = useContext(DataContext);
-    return account.name && account.role === "Student" ? <Outlet /> : <Navigate to="/" />;
+    return account.name && account.role === "Student" ? <Outlet /> : <Navigate to="/Login" />;
   };
   
   const ConsultantRoutes = () => {
     const { account } = useContext(DataContext);
-    return account.name && account.role === "Consultant" ? <Outlet /> : <Navigate to="/" />;
+    return account.name && account.role === "Consultant" ? <Outlet /> : <Navigate to="/Login" />;
   };
   
   const AdminRoutes = () => {
     const { account } = useContext(DataContext);
-    return account.name && account.role === "Admin" ? <Outlet /> : <Navigate to="/" />;
+    return account.name && account.role === "Admin" ? <Outlet /> : <Navigate to="/login" />;
   };
 
   return (
@@ -55,12 +63,17 @@ function App() {
             
             {/*-------------------- STUDENT ROUTES --------------------------*/}
             <Route element={<StudentRoutes />}>
-              <Route path="/Student/Home" element={<StudentHome />} />
+              <Route path="/student/dashboard/home" element={<DashHome />} />
+              <Route path="/student/dashboard/bookings" element={<DashBookings />} />
+              <Route path="/student/dashboard/find" element={<DashFind />} />
+              <Route path="/student/dashboard/profile" element={<DashProfile />} />
+              <Route path="/student/dashboard/rewards" element={<DashRewards />} />
             </Route>
 
             {/*-------------------- CONSULTANT ROUTES --------------------------*/}
             <Route element={<ConsultantRoutes />}>
-              <Route path="/Consultant/Home" element={<ConsultHome />} />
+              <Route path="/consultant/dashboard/home" element={<C_DashHome />} />
+              <Route path="/consultant/dashboard/profile" element={<C_DashProfile />} />
             </Route>
 
             {/*-------------------- ADMIN ROUTES --------------------------*/}

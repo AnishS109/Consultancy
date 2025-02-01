@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AppBar, Box, Toolbar, Typography, TextField, InputAdornment, Button, Avatar, Drawer, Divider } from "@mui/material";
+import { AppBar, Box, Toolbar, Typography, TextField, InputAdornment, Button, Avatar, Drawer } from "@mui/material";
 import { Search as SearchIcon, Menu as MenuIcon, CardGiftcard as CardGiftcardIcon } from '@mui/icons-material';
 
 import img from "../assets/Student.jpg";

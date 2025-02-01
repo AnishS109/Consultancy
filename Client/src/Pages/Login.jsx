@@ -71,9 +71,9 @@ const Login = () => {
       if(response.status === 200){
           setAccount(response.data)
         if(response.data.role === "Student"){
-          navigate("/Student/Home")
+          navigate("/student/dashboard/home")
         }else if(response.data.role === "Consultant"){
-            navigate("/Consultant/Home")
+            navigate("/consultant/dashboard/home")
         }
       }
     } catch (error) {
