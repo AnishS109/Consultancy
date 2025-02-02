@@ -26,7 +26,7 @@ export const userLogin = async(req, res) => {
         role:user.role
       }, RefreshToken)
 
-      return res.status(200).json({accessToken, refreshToken, name: user.name, role:user.role})
+      return res.status(200).json({accessToken, refreshToken, name: user.name, role:user.role, email:user.email})
     }
     else{
       return res.status(400).json({message:"Password is Incorrect"})

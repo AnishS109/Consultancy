@@ -4,13 +4,13 @@ export const DataContext = createContext(null);
 
 const DataProvider = ({ children }) => {  
 
-  const backendUrl = "https://consultancy-backend-rdmf.onrender.com";
+  const backendUrl = "http://localhost:5000";
 
   // ----------------------------------------------------------------------------
   
   const [account, setAccount] = useState(() => {
     const savedAccount = sessionStorage.getItem("account");
-    return savedAccount ? JSON.parse(savedAccount) : { name: "", role: "", accesstoken:"", refreshtoken:"" };
+    return savedAccount ? JSON.parse(savedAccount) : { name: "", role: "", accesstoken:"", refreshtoken:"", email:"" };
   });
 
   useEffect(() => {

@@ -6,7 +6,7 @@ import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 const DashHeader = ({ title }) => {
   return (
   <>
-  <Box className="h-24 border-b-2 w-[100%] flex justify-between">
+  <Box className="h-24 sticky top-0 z-10 bg-white border-b-2 w-[100%] flex justify-between">
 
     <Typography className='text-gray-700 font-bold text-[2rem] py-6 px-10 text-nowrap'>
       {title}

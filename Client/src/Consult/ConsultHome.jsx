@@ -29,13 +29,13 @@ const ConsultHome = () => {
     <>
 <Box className="flex">
 
-<Box className="h-screen w-[387px] hidden md:block bg-[#f7f6f2]">
+<Box className="h-screen sticky top-0 left-0  w-[387px] hidden md:block bg-[#f7f6f2]">
 
 {/* --------------------------------------------------------------------------------------------- */}
 
 <Box className="flex flex-col items-center gap-4">
 
-<Typography className="bg-[#ece6db] w-fit p-3 px-10 rounded-[10px] text-[14px] text-stone-700  font-semibold mt-5"> 
+<Typography className="bg-[#ece6db] w-fit p-3 px-10 text-nowrap rounded-[10px] text-[14px] text-stone-700  font-semibold mt-5"> 
 <span><DashboardIcon className="text-[18px] mb-[2px] text-[#8c5300]"/></span> Consultant Dashboard
 </Typography>
 

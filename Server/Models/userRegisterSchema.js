@@ -12,6 +12,24 @@ const userRegisterSchema = new mongoose.Schema({
   },
   role: {
     type: String, 
+  },
+  univerityName: {
+    type:String
+  },
+  collegeName: {
+    type:String
+  },
+  countryName: {
+    type:String
+  },
+  degreeName: {
+    type:String
+  },
+  consultPhoneNumber:{
+    type:String
+  },
+  consultImage:{
+    type:String
   }
 });
 
