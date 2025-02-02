@@ -8,4 +8,4 @@ StudentRouter.use(express.json())
 
 StudentRouter.get("/fetching-consultants", fetchingConsultants)
 
-export default StudentRouter
+export default StudentRouter;
