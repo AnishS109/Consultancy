@@ -20,7 +20,7 @@ export const fetchProfileData = async(req, res) => {
 export const updatingProfileData = async(req, res) => {
 
   const {email, role, name, univerityName, collegeName, countryName, degreeName, consultImage, 
-    consultPhoneNumber} = req.body
+    consultPhoneNumber, consultSkills, consultLinkedinUrl, consultExperienceYears, consultDescription, consultAbout} = req.body
 
   try {
   const userData = await UserRegisterSchema.findOne({email,role})
@@ -32,6 +32,11 @@ export const updatingProfileData = async(req, res) => {
   userData.consultImage = consultImage
   userData.degreeName = degreeName
   userData.consultPhoneNumber = consultPhoneNumber
+  userData.consultSkills = consultSkills
+  userData.consultLinkedinUrl = consultLinkedinUrl
+  userData.consultExperienceYears = consultExperienceYears 
+  userData.consultDescription = consultDescription
+  userData.consultAbout = consultAbout
   
   await userData.save()
   res.status(200).json({message:"Profile Updated Successfully"})

@@ -1,6 +1,6 @@
-import React from 'react'
+import axios from "axios"
+import React, { useContext, useEffect, useState } from 'react'
 import { Box, Button, Typography } from "@mui/material"
-
 
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -8,12 +8,37 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import HomeCards from '../ReusableComp/HomeCards';
 import MarqueeEffect from './MarqueeEffect';
 import HomeCardd_2 from '../ReusableComp/HomeCardd_2';
+import { DataContext } from '../Context/DataProvider';
 
 const StickyNavBar = () => {
 
   const NavTitles = ["Referral in 15 Mins", "Premium Picks", "Resume Preview", "Resume Review(Free)", "Service based Mock Interviews", "Mock Interview", "Mock Interview(Free)", "Most Visited", "Data", "Career", `Hot Sellers`, "Software", "Product", "Community Icons", "Get a Referral in Microsoft(Free)", "Get a Referral in Walmart(Free)", "Get a Referral in Google(Free)", "Study Abroad Planning", "Immigation Law", "Visa Guidance", "Get a Referral in Amazon(Free)"]
 
-  const Referral_in_15 = ["1","2","3","4","5","6","7","8","9","10"]
+  // const Referral_in_15 = ["1","2","3","4","5","6","7","8","9","10"]
+
+// --------------------------------------------------------------------
+
+  const { backendUrl } = useContext(DataContext)
+
+// --------------------------------------------------------------------
+
+  const [consulData, setConsulData] = useState([])
+
+// --------------------------------------------------------------------
+
+  useEffect(() => {
+    const fetchConsultant = async() => {
+      try {
+        const response = await axios.get(`${backendUrl}/Student/fetching-consultants`)
+        if(response.status === 200){
+          setConsulData(response.data)
+        }
+      } catch (error) {
+        console.log(error.response.data.message)
+      }
+    }
+    fetchConsultant()
+  },[])
 
   return (
     <>
@@ -74,8 +99,8 @@ const StickyNavBar = () => {
 
     <Box className="overflow-x-auto scrollbar-hide">
     <div className="flex gap-4 w-fit pl-2 sm:pl-12 pr-3 mt-7 overflow-x-auto scroll-smooth scrollbar-hide">
-      {Referral_in_15.map((items) => (
-        <HomeCards key={items} />
+      {consulData.map((items) => (
+        <HomeCards key={items._id} item={items} />
       ))}
     </div>
     </Box>
@@ -90,8 +115,8 @@ const StickyNavBar = () => {
 
     <Box className="overflow-x-auto scrollbar-hide">
     <div className="flex gap-4 w-fit pl-2 sm:pl-12 pr-3 mt-7 overflow-x-auto scroll-smooth scrollbar-hide">
-      {Referral_in_15.map((items) => (
-        <HomeCards key={items} />
+      {consulData.map((items) => (
+        <HomeCards key={items._id} item={items} />
       ))}
     </div>
     </Box>
@@ -110,8 +135,8 @@ const StickyNavBar = () => {
 
     <Box className="overflow-x-auto scrollbar-hide">
     <div className="flex gap-4 w-fit pl-2 sm:pl-12 pr-3 mt-7 overflow-x-auto scroll-smooth scrollbar-hide">
-      {Referral_in_15.map((items) => (
-        <HomeCardd_2 key={items} />
+    {consulData.map((items) => (
+        <HomeCards key={items._id} item={items} />
       ))}
     </div>
     </Box>
@@ -126,8 +151,8 @@ const StickyNavBar = () => {
 
     <Box className="overflow-x-auto scrollbar-hide">
     <div className="flex gap-4 w-fit pl-2 sm:pl-12 pr-3 mt-7 overflow-x-auto scroll-smooth scrollbar-hide">
-      {Referral_in_15.map((items) => (
-        <HomeCardd_2 key={items} />
+    {consulData.map((items) => (
+        <HomeCards key={items._id} item={items} />
       ))}
     </div>
     </Box>

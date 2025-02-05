@@ -30,7 +30,25 @@ const userRegisterSchema = new mongoose.Schema({
   },
   consultImage:{
     type:String
-  }
+  },
+  consultIdImage:{
+    type:String
+  },
+  consultSkills:{
+    type:String
+  },
+  consultLinkedinUrl:{
+    type:String
+  },
+  consultExperienceYears:{
+    type:Number
+  },
+  consultDescription:{
+    type:String
+  },
+  consultAbout:{
+    type:String
+  },
 });
 
 const UserRegisterSchema = new mongoose.model("UserDetails", userRegisterSchema);

@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { DataContext } from '../../Context/DataProvider'
 import axios from "axios"
 
-import img  from "../../assets/images.jpg"
+import CheckIcon from '@mui/icons-material/Check';
 
 // -----------------------------------------------------------------------------------------
 
@@ -20,10 +20,17 @@ export const ConsultDashProfileContent = () => {
 // --------------------------------- PROFILE SECTION ---------------------------------------
 
   const fileInputRef = useRef(null);
+  const CollegeIdInputRef = useRef(null);
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
+
+  const handleButtonClicks = () => {
+    CollegeIdInputRef.current.click();
+  };
+
+// ------------------------------------------------------------------------------
 
   const ImageUpload = async(img) => {
     const serverResponse = {
@@ -41,16 +48,38 @@ export const ConsultDashProfileContent = () => {
     }
   }
 
+// -----------------------------------------------------------------------------
+
+  const DocImageUpload = async(img) => {
+    const serverResponse = {
+      img,
+      email:account.email,
+      role:account.role,
+    }
+    try {
+      const response = await axios.post(`${backendUrl}/Consult/Consult-College-ID-image-Data-Save`, serverResponse)
+      if(response.status === 200){
+        setMessageModal({ open: true, message: response.data.message, severity: 'success' })
+      }
+    } catch (error) {
+      // console.log(error.response.data.message)
+    }
+  }
+
+// ------------------------------------------------------------------------------
+
   const ProfileHandleImageUpload = async() => {
     setloading(true)
     const formdata = new FormData();
-    formdata.append("file", file);
+      formdata.append("file", file);
+      // formdata.append("file", docFile)
 
     try {
       const response = await axios.post(`${backendUrl}/Consult/Consult-profile-Image`, formdata)
       if(response.status === 200){
         const imageUrl = `${backendUrl}/Consult/file/${response.data}`
-        ImageUpload(imageUrl)
+          ImageUpload(imageUrl)
+          // DocImageUpload(imageUrl)
       }
     } catch (error) {
       setMessageModal({ open: true, message: error.response?.data?.message || "Check your connection! Try later", severity: 'error' })
@@ -59,10 +88,34 @@ export const ConsultDashProfileContent = () => {
     }
   }
 
+  const ProfileHandleImageIDUpload = async() => {
+    setloadings(true)
+    const formdata = new FormData();
+      // formdata.append("file", file);
+      formdata.append("file", docFile)
+
+    try {
+      const response = await axios.post(`${backendUrl}/Consult/Consult-profile-Image`, formdata)
+      if(response.status === 200){
+        const imageUrl = `${backendUrl}/Consult/file/${response.data}`
+          // ImageUpload(imageUrl)
+          DocImageUpload(imageUrl)
+      }
+    } catch (error) {
+      setMessageModal({ open: true, message: error.response?.data?.message || "Check your connection! Try later", severity: 'error' })
+    } finally {
+      setloadings(false)
+    }
+  }
+
+// ------------------------------------------------------------------------------
+
 // ---------------------------------------------------------------------------------
 
   const [file,setFile] = useState("")
+  const [docFile, setDocFile] = useState("")
   const [loading, setloading] = useState(false)
+  const [loadings, setloadings] = useState(false)
   const [dataLoading, setDataloading] = useState(false)
   const [messageModal, setMessageModal] = useState({ open: false, message: '', severity: 'success' });
 
@@ -74,7 +127,12 @@ export const ConsultDashProfileContent = () => {
     degreeName:"",
     email:account.email,
     role:account.role,
-    consultPhoneNumber:""
+    consultPhoneNumber:"",
+    consultSkills:"",
+    consultLinkedinUrl:"",
+    consultExperienceYears:"",
+    consultDescription:"",
+    consultAbout:""
   })  
   
 // ---------------------------------------------------------------------------------
@@ -94,6 +152,12 @@ const ProfileSubmitHandle = async(e) => {
   e.preventDefault()
   setDataloading(true)
 
+  if(profileData.consultPhoneNumber.length !== 10){
+    setMessageModal({ open: true, message: 'Enter 10 Digit Mobile Number', severity: 'error' })
+    setDataloading(false)
+    return
+  }
+
   try {
     const response = await axios.post(`${backendUrl}/Consult/Updating-Profile-Data`, profileData)
     if(response.status === 200){
@@ -107,7 +171,7 @@ const ProfileSubmitHandle = async(e) => {
 }
 
 // ---------------------------------------------------------------------------------
-useEffect(() => {
+  useEffect(() => {
   const fetchProfileData = async() => {
     const serverResponse = {
       email:profileData.email,
@@ -174,15 +238,16 @@ useEffect(() => {
 
 </Box>  
 
-{/* -------------------------------------- REMAINING ------------------------------------------------ */}
+{/* -------------------------------------- REMAINING ---------------------------------------- */}
   
   {activeButton === "Profile" ? (
 
 <>
     
-<Box className="flex gap-5 items-center px-3 sm:px-20 py-4 justify-evenly md:w-[60vw]">
+<Box className="flex gap-5 items-center px-8 sm:pl-32 py-4 justify-between md:w-[60vw]">
   <Box className="flex gap-10 sm:gap-14 md:gap-10 items-center">
-  <Avatar 
+  <Avatar
+  onClick={handleButtonClick} 
   className='h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28'
   src={profileData.consultImage ? (profileData.consultImage): ("")}
   />
@@ -205,18 +270,13 @@ useEffect(() => {
       className="hidden" 
       onChange={(e) => setFile(e.target.files[0])} 
     />
-    <Button 
-      onClick={handleButtonClick} 
-      variant='outlined'
-      className='normal-case text-nowrap text-[12px] sm:text-[15px] md:text-[16px] bg-black text-white font-semibold rounded-[30px] hover:bg-transparent hover:text-black border-black transition-all'>
-      Select
-    </Button>
   </div>  
+
   {loading ? (
     <CircularProgress className='text-black sm:ml-8'/>
   ): (
     <Button 
-    onClick={ProfileHandleImageUpload} 
+    onClick={ProfileHandleImageUpload}   
     variant='outlined'
     className='normal-case text-nowrap text-[12px] sm:text-[15px] md:text-[16px] bg-black text-white font-semibold rounded-[30px] hover:bg-transparent hover:text-black border-black transition-all'>
     Upload Photo
@@ -224,6 +284,58 @@ useEffect(() => {
   )}
   </Box>
 </Box>
+
+{/* ------------------------------------------------------------------------------ */}
+
+<Box className="flex gap-5 items-center px-8 sm:pl-32 py-4 justify-between 
+md:w-[60vw] my-4">
+
+{profileData.consultIdImage !== "" ? (
+
+  <Typography className='text-green-500 font-bold'>
+  <span><CheckIcon/></span> College ID Uploaded</Typography>
+
+) : (
+  <>
+
+  <Box className="flex flex-col">
+  <Typography
+   onClick={handleButtonClicks}
+   className='text-black cursor-pointer hover:underline text-nowrap text-[14px] sm:text-[16px] md:sm:text-[18px] font-semibold'>
+    Select College ID
+  </Typography>
+  <Typography className='text-gray-600 text-[12px] sm:text-[14px] md:sm:text-[15px]'>
+    Required
+  </Typography>
+  </Box>
+
+  <div>
+    <input 
+      type="file" 
+      ref={CollegeIdInputRef} 
+      className="hidden" 
+      onChange={(e) => setDocFile(e.target.files[0])} 
+    />
+  </div> 
+
+  {loadings ? (
+    <CircularProgress className='text-black sm:ml-8'/>
+  ): (
+    <Button 
+    onClick={ProfileHandleImageIDUpload} 
+    variant='outlined'
+    className='normal-case text-nowrap text-[12px] sm:text-[15px] md:text-[16px] bg-black text-white font-semibold rounded-[30px] hover:bg-transparent hover:text-black border-black transition-all'>
+    Upload Photo
+  </Button>
+  )}
+
+  </>
+)}
+
+</Box>
+
+{/* ------------------------------------------------------------------------------ */}
+
 
 <Box className="mx-auto h-fit px-8 sm:w-[70vw] md:w-[60vw] md:pr-32">
 
@@ -250,13 +362,34 @@ sx={{
 
 <Typography className="text-black font-semibold mb-1">Phone Number</Typography>
 <TextField
-type="text"
 value={profileData.consultPhoneNumber}
 onChange={ProfilehandleChange}
 required
+type="number"
 placeholder="Enter your Phone Number"
 variant="outlined"
 name="consultPhoneNumber"
+className="mb-5 bg-gray-100 rounded-lg w-full"
+sx={{
+  "& .MuiOutlinedInput-root": {
+    "&.Mui-focused fieldset": {
+      borderColor: "black", 
+    },
+  },
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: "black", 
+  },
+}} />
+
+<Typography className="text-black font-semibold mb-1">Location</Typography>
+<TextField
+type="text"
+value={profileData.countryName}
+onChange={ProfilehandleChange}
+required
+placeholder="Enter your Location here"
+variant="outlined"
+name="countryName"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
   "& .MuiOutlinedInput-root": {
@@ -332,15 +465,15 @@ sx={{
   },
 }} />
 
-<Typography className="text-black font-semibold mb-1">Location</Typography>
+<Typography className="text-black font-semibold mb-1">Skills</Typography>
 <TextField
 type="text"
-value={profileData.countryName}
+value={profileData.consultSkills}
 onChange={ProfilehandleChange}
 required
-placeholder="Enter your Location here"
+placeholder="e.g. Data Analytics, Machine Learning"
 variant="outlined"
-name="countryName"
+name="consultSkills"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
   "& .MuiOutlinedInput-root": {
@@ -353,13 +486,102 @@ sx={{
   },
 }} />
 
+<Typography className="text-black font-semibold mb-1">Linkedin Url</Typography>
+<TextField
+type="text"
+value={profileData.consultLinkedinUrl}
+onChange={ProfilehandleChange}
+required
+placeholder="Enetr your Linkedin Profile Url"
+variant="outlined"
+name="consultLinkedinUrl"
+className="mb-5 bg-gray-100 rounded-lg w-full"
+sx={{
+  "& .MuiOutlinedInput-root": {
+    "&.Mui-focused fieldset": {
+      borderColor: "black", 
+    },
+  },
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: "black", 
+  },
+}} />
+
+<Typography className="text-black font-semibold mb-1">Experience</Typography>
+<TextField
+type="number"
+value={profileData.consultExperienceYears}
+onChange={ProfilehandleChange}
+required
+placeholder="in years"
+variant="outlined"
+name="consultExperienceYears"
+className="mb-5 bg-gray-100 rounded-lg w-full"
+sx={{
+  "& .MuiOutlinedInput-root": {
+    "&.Mui-focused fieldset": {
+      borderColor: "black", 
+    },
+  },
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: "black", 
+  },
+}} />
+
+<Typography className="text-black font-semibold mb-1">About yourself</Typography>
+<TextField
+type="text"
+value={profileData.consultAbout}
+onChange={ProfilehandleChange}
+required
+placeholder="Enetr your description here"
+variant="outlined"
+name="consultAbout"
+multiline
+rows={2}
+className="mb-5 bg-gray-100 rounded-lg w-full"
+sx={{
+  "& .MuiOutlinedInput-root": {
+    "&.Mui-focused fieldset": {
+      borderColor: "black", 
+    },
+  },
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: "black", 
+  },
+}} />
+
+<Typography className="text-black font-semibold mb-1">Description</Typography>
+<TextField
+type="text"
+value={profileData.consultDescription}
+onChange={ProfilehandleChange}
+required
+placeholder="Enetr your description here"
+variant="outlined"
+name="consultDescription"
+multiline
+rows={4}
+className="mb-5 bg-gray-100 rounded-lg w-full"
+sx={{
+  "& .MuiOutlinedInput-root": {
+    "&.Mui-focused fieldset": {
+      borderColor: "black", 
+    },
+  },
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: "black", 
+  },
+}} />
+
+
   {/*-------------------- Snackbar for messages ---------------------*/}
 
   <Snackbar
     open={messageModal.open}
     autoHideDuration={3000}
     onClose={handleCloseMessageModal}
-    anchorOrigin={{ vertical: 'bottom', horizontal: 'center', }}
+    anchorOrigin={{ vertical: 'top', horizontal: 'center', }}
   >
     <Alert onClose={handleCloseMessageModal} severity={messageModal.severity} sx={{ width: '100%' }}>
       <b>{messageModal.message}</b>
@@ -367,6 +589,8 @@ sx={{
   </Snackbar>
 
 </Box>
+
+{/* ------------------------------------------------------------------------------ */}
 
 </>
 

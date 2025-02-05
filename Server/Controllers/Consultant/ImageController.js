@@ -2,6 +2,8 @@ import grid from "gridfs-stream"
 import mongoose from "mongoose"
 import UserRegisterSchema from "../../Models/userRegisterSchema.js";
 
+// ----------------- DONWLOADING IMAGE FROM BACKEND --------------------------
+
 let gfs,gridfsBucket
 const conn = mongoose.connection;
 conn.once('open', () => {
@@ -30,6 +32,8 @@ export const getImage = async (req, res) => {
   }
 };
 
+// ----------------- SENDING IMAGE URL TO FRONT END --------------------------
+
 export const UploadImage = (req,res) => {
   
   if(!req.file){
@@ -41,6 +45,7 @@ export const UploadImage = (req,res) => {
   return res.status(200).json(imageUrl)
 }
 
+// ----------------- SAVING PROFILE IMAGE URL TO DATABASE  --------------------------
 
 export const SavingConsultImage = async(req,res) => {
   const {img,email,role} = req.body
@@ -49,6 +54,22 @@ export const SavingConsultImage = async(req,res) => {
     const userData = await UserRegisterSchema.findOne({email, role})
 
     userData.consultImage = img
+    userData.save()
+    return res.status(200).json({message:"Image Uploaded"})
+  } catch (error) {
+    return res.status(500).json({message:"Error While uploading image"})
+  }
+}
+
+// ----------------- SAVING COLLEGE ID URL TO DATABASE  --------------------------
+
+export const SavingConsultCollegeIdImage = async(req,res) => {
+  const {img,email,role} = req.body
+
+  try {
+    const userData = await UserRegisterSchema.findOne({email, role})
+
+    userData.consultIdImage = img
     userData.save()
     return res.status(200).json({message:"Image Uploaded"})
   } catch (error) {
