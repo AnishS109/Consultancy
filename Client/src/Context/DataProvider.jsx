@@ -4,7 +4,7 @@ export const DataContext = createContext(null);
 
 const DataProvider = ({ children }) => {  
 
-  const backendUrl = "http://localhost:5000";
+  const backendUrl = "https://consultancy-uyf6.onrender.com";
 
   // ----------------------------------------------------------------------------
   
