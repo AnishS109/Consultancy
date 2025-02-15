@@ -20,18 +20,13 @@ const HomeCards = ({item}) => {
         </CardMedia>
 
         <CardContent>
+
           <Typography className='mt-[-20px] font-bold text-[20px]'>
             {item.name}
           </Typography>
+
           <Typography
-          sx={{
-            display: '-webkit-box',
-            WebkitBoxOrient: 'vertical',
-            WebkitLineClamp: 2, // Limits to 2 lines
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}
-           className='text-wrap text-[15px] text-[#696868]'>
+            className="text-wrap text-[15px] text-[#696868] line-clamp-2">
             {item.consultDescription}
           </Typography>
 

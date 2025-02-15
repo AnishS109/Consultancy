@@ -10,6 +10,7 @@ import DashProfile from "./Student/DashBoardPages/DashProfile";
 import DashRewards from "./Student/DashBoardPages/DashRewards";
 import C_DashHome from "./Consult/ConsultPages/C_DashHome";
 import C_DashProfile from "./Consult/ConsultPages/C_DashProfile";
+import ConsultProfile from "./Components/ConsultProfile";
 
 const Home = lazy(() => import("./Pages/Home"));
 const Login = lazy(() => import("./Pages/Login"));
@@ -58,6 +59,7 @@ function App() {
             <Route path="/Student/Register" element={<StudentRegister />} />
             <Route path="/Consultant/Register" element={<ConsultantRegister />} />
             <Route path="/ForgotPassword" element={<ForgotPassword />} />
+            <Route path="/Profile/:name?/:id" element={<ConsultProfile />} />
 
             {/* ------------------- PROTECTED ROUTES ----------------------- */}
             
