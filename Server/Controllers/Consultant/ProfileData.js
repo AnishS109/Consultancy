@@ -46,3 +46,21 @@ export const updatingProfileData = async(req, res) => {
   return res.status(500).json({message:"Error while updating Profile"})
   }
 }
+
+// --------------------- FETCHING DATA FOR PROFILE SECTION ----------------
+
+export const fetchingDataForProfileScetion = async(req, res) => {
+  const { id } = req.query
+
+  try {
+    const data = await UserRegisterSchema.findOne({_id:id})
+
+    if(!data){
+      return res.status(404).json({message:"Consultant accout may deleted or disabled"})
+    }
+
+    return res.status(200).json(data)
+  } catch (error) {
+    return res.status(500).json({message:"Something went wrong! Try again later"})
+  }
+}

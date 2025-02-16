@@ -35,9 +35,8 @@ const Navbar = () => {
         position="static"
         sx={{
           backgroundColor: "#fff",
-          mb: "5px",
           transition: "background-color 0.3s ease",
-          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)"
+          boxShadow: "0px 2px 20px rgba(0, 0, 0, 0.1)"
         }}
       >
         

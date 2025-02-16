@@ -1,5 +1,5 @@
 import express from "express"
-import { fetchProfileData, updatingProfileData } from "../Controllers/Consultant/ProfileData.js"
+import { fetchProfileData, fetchingDataForProfileScetion, updatingProfileData } from "../Controllers/Consultant/ProfileData.js"
 import uploadImg from "../utils/uploadImg.js"
 import { getImage, SavingConsultCollegeIdImage, SavingConsultImage, UploadImage } from "../Controllers/Consultant/ImageController.js"
 
@@ -15,5 +15,7 @@ ConsultRouter.post("/Consult-profile-Image",uploadImg.single("file"), UploadImag
 ConsultRouter.post("/Consult-Profile-image-Data-Save", SavingConsultImage);
 ConsultRouter.post("/Consult-College-ID-image-Data-Save", SavingConsultCollegeIdImage);
 ConsultRouter.get("/file/:filename", getImage)
+
+ConsultRouter.get("/Consult-Home-Profile-Section", fetchingDataForProfileScetion)
 
 export default ConsultRouter
