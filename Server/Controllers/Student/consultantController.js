@@ -1,5 +1,7 @@
 import UserRegisterSchema from "../../Models/userRegisterSchema.js"
 
+// ------------- FETCHING CONSULTANTS --------------------
+
 export const fetchingConsultants = async(req,res) => {
 
   const role = "Consultant"

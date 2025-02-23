@@ -13,6 +13,77 @@ const userRegisterSchema = new mongoose.Schema({
   role: {
     type: String, 
   },
+  
+
+// ----------  STUDENT ---------------
+
+  studentDOB: {
+    type: Date,
+  },
+  studentGender: {
+    type: String,
+  },
+  studentPhoto: {
+    type: String,
+  },
+  studentNumber: {
+    type: String,
+  },
+  studentAddress: {
+    type: String,
+  },
+  studentExamsTaken: {
+    type: [String],
+    default:[]
+  },
+  studentDegreeInterested: {
+    type: [String],
+    default:[]
+  },
+  studentfather: {
+    type: String,
+  },
+  studentMother: {
+    type: String,
+  },
+  studentFatherOccu: {
+    type: String,
+  },
+  studentCollegeInterested: {
+    type: [String],
+    default: [], 
+  },
+  studentCountryInterested: {
+    type: [String],
+    default: [], 
+  },
+  studentSchoolName:{
+    type: String
+  },
+  studentGraduateCollegeName:{
+    type: String
+  },
+  studentGraduateCollegeDegreeName:{
+    type: String
+  },
+  studentGraduateCollegeSpecialisation:{
+    type: String
+  },
+  studentGraduateCollegeYear:{
+    type: String
+  },
+  studentPostCollegeName:{
+    type: String
+  },
+  studentPostCollegeDegreeName:{
+    type: String
+  },
+  studentPostCollegeSpecialisation:{
+    type: String
+  },
+
+// --------------- CONSULT -------------------
+
   univerityName: {
     type:String
   },
