@@ -45,34 +45,65 @@ export const UploadImage = (req,res) => {
   return res.status(200).json(imageUrl)
 }
 
-// ----------------- SAVING PROFILE IMAGE URL TO DATABASE  --------------------------
+// ----------------- SAVING PROFILE IMAGE 1 URL TO DATABASE  --------------------------
 
-export const SavingConsultImage = async(req,res) => {
-  const {img,email,role} = req.body
+export const SavingConsultProfilePhoto1 = async(req,res) => {
+
+  const {img,email} = req.body
 
   try {
-    const userData = await UserRegisterSchema.findOne({email, role})
-
-    userData.consultImage = img
+    const userData = await UserRegisterSchema.findOne({email})
+    userData.consultProfilePhoto1 = img
     userData.save()
-    return res.status(200).json({message:"Image Uploaded"})
+    return res.status(200).json({message:"Image Uploaded Successfully"})
   } catch (error) {
-    return res.status(500).json({message:"Error While uploading image"})
+    return res.status(500).json({message:"Error While Uploading Image! Try Again Later."})
   }
 }
 
-// ----------------- SAVING COLLEGE ID URL TO DATABASE  --------------------------
+// ----------------- SAVING PROFILE IMAGE 2 URL TO DATABASE  --------------------------
 
-export const SavingConsultCollegeIdImage = async(req,res) => {
-  const {img,email,role} = req.body
+export const SavingConsultProfilePhoto2 = async(req,res) => {
+
+  const {img,email} = req.body
 
   try {
-    const userData = await UserRegisterSchema.findOne({email, role})
-
-    userData.consultIdImage = img
+    const userData = await UserRegisterSchema.findOne({email})
+    userData.consultProfilePhoto2 = img
     userData.save()
-    return res.status(200).json({message:"Image Uploaded"})
+    return res.status(200).json({message:"Image Uploaded Successfully"})
   } catch (error) {
-    return res.status(500).json({message:"Error While uploading image"})
+    return res.status(500).json({message:"Error While Uploading Image! Try Again Later."})
+  }
+}
+
+// ----------------- SAVING PROFILE IMAGE 3 URL TO DATABASE  --------------------------
+
+export const SavingConsultProfilePhoto3 = async(req,res) => {
+
+  const {img,email} = req.body
+
+  try {
+    const userData = await UserRegisterSchema.findOne({email})
+    userData.consultProfilePhoto3 = img
+    userData.save()
+    return res.status(200).json({message:"Image Uploaded Successfully"})
+  } catch (error) {
+    return res.status(500).json({message:"Error While Uploading Image! Try Again Later."})
+  }
+}
+// ----------------- SAVING COLLEGE ID URL TO DATABASE  --------------------------
+
+export const SavingConsultCollegeIDphoto = async(req,res) => {
+
+  const {img,email} = req.body
+
+  try {
+    const userData = await UserRegisterSchema.findOne({email})
+    userData.consultCollegeID = img
+    userData.save()
+    return res.status(200).json({message:"College ID Uploaded Successfully"})
+  } catch (error) {
+    return res.status(500).json({message:"Error While Uploading College ID! Try Again Later."})
   }
 }

@@ -8,13 +8,13 @@ const HomeCards = ({item}) => {
 
         <CardMedia className='p-3'>
           <Box 
-          sx={{backgroundImage:`url(${item.consultImage})`}} 
+          sx={{backgroundImage:`url(${item.consultProfilePhoto1})`}} 
           className="bg-cover h-[180px] w-[170px] bg-no-repeat rounded-[30px]">
             <Button
             variant='contained'
             className='bg-white text-green-600 text-[11px] font-extrabold normal-case rounded-[25px] mt-32 ml-2'
             >
-              {item.countryName}
+              {item.consultCountry}
             </Button>
           </Box>
         </CardMedia>

@@ -87,10 +87,8 @@ const ConsultProfile = () => {
         const response = await axios.get(`${backendUrl}/Student/fetching-consultants`)
         if(response.status === 200){
           setConsultAllData(response.data)
-          console.log(response.data)
         }
       } catch (error) {
-        console.log(error.response.data.message)
       }
     }
     fetchConsultant()
@@ -115,7 +113,7 @@ const ConsultProfile = () => {
 ) : (
   <>
   <Avatar 
-  src={`${ConsultData.consultImage}`}
+  src={`${ConsultData.consultProfilePhoto1}`}
   className='h-28 w-28 sm:h-32 sm:w-32 md:h-[20vh] md:w-[20vw] lg:h-44 lg:w-44 mt-6 ml-8 md:ml-0'/>
   </>
 )}
@@ -211,7 +209,7 @@ className={`border-black ${Category === "Priority" ? "bg-black text-white" :
     About Me
   </Typography>
   
-  <a href={ConsultData.consultLinkedinUrl} target="_blank" rel="noopener noreferrer">
+  <a href={ConsultData.consultLinkedin} target="_blank" rel="noopener noreferrer">
   <Box className="bg-[#fefefe] w-fit p-4 rounded-2xl cursor-pointer mt-2 md:mt-4">
     <span><FaLinkedin className='text-4xl'/></span>
   </Box>
@@ -291,7 +289,7 @@ export const SimilarProfileCard = ({data}) => {
 <Box className="bg-white rounded-[15px] w-[180px] p-4 cursor-pointer">
 
   <img 
-  src={`${data.consultImage}`}
+  src={`${data.consultProfilePhoto1}`}
   alt="Image"
   className='w-36 h-36 rounded-[15px]'/>
 

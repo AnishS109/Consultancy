@@ -34,11 +34,9 @@ const userRegisterSchema = new mongoose.Schema({
   },
   studentExamsTaken: {
     type: [String],
-    default:[]
   },
   studentDegreeInterested: {
     type: [String],
-    default:[]
   },
   studentfather: {
     type: String,
@@ -51,11 +49,9 @@ const userRegisterSchema = new mongoose.Schema({
   },
   studentCollegeInterested: {
     type: [String],
-    default: [], 
   },
   studentCountryInterested: {
     type: [String],
-    default: [], 
   },
   studentSchoolName:{
     type: String
@@ -84,40 +80,88 @@ const userRegisterSchema = new mongoose.Schema({
 
 // --------------- CONSULT -------------------
 
-  univerityName: {
+  consultProfilePhoto1: {
     type:String
   },
-  collegeName: {
+  consultProfilePhoto2: {
     type:String
   },
-  countryName: {
+  consultProfilePhoto3: {
     type:String
   },
-  degreeName: {
+  consultDOB: {
+    type:Date
+  },
+  consultGender:{
+    type:String
+  },
+  consultAddress:{
+    type:String
+  },
+  consultCountry:{
+    type:String
+  },
+  consultPostalCode:{
+    type:Number
+  },
+  consultCollegeID:{
+    type:String
+  },
+  consultCollegeName:{
+    type:Number
+  },
+  consultUniversityName:{
+    type:String
+  },
+  consultCollegeMajor:{
+    type:String
+  },
+  consultAdmissionDate:{
+    type:Date
+  },
+  consultExamsGiven:{
+    type:[String]
+  },
+  consultSemFees:{
+    type:Number
+  },
+  consultMonthlyExpenses:{
+    type:Number
+  },
+  consultBankLoan:{
+    type:Number
+  },
+  consultBankAccNumber:{
+    type:Number
+  },
+  consultBankAccHolderName:{
+    type:String
+  },
+  consultBankIANnumber:{
+    type:Number
+  },
+  consultBankSwiftCode:{
     type:String
   },
   consultPhoneNumber:{
     type:String
   },
-  consultImage:{
+  consultLinkedin:{
     type:String
   },
-  consultIdImage:{
+  consultYT:{
     type:String
   },
-  consultSkills:{
+  consultInstagram:{
     type:String
   },
-  consultLinkedinUrl:{
-    type:String
-  },
-  consultExperienceYears:{
-    type:Number
-  },
-  consultDescription:{
+  consultGitHub:{
     type:String
   },
   consultAbout:{
+    type:String
+  },
+  consultDescription:{
     type:String
   },
 });
