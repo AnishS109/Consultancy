@@ -2,6 +2,7 @@ import express from "express"
 import { fetchProfileData, fetchingDataForProfileScetion, updatingProfileData } from "../Controllers/Consultant/ProfileData.js"
 import uploadImg from "../utils/uploadImg.js"
 import { getImage, SavingConsultCollegeIDphoto, SavingConsultProfilePhoto1, SavingConsultProfilePhoto2, SavingConsultProfilePhoto3, UploadImage } from "../Controllers/Consultant/ImageController.js"
+import { AddingTimings, FetchingTimings, deletingTimeData } from "../Controllers/Consultant/Availability.js"
 
 const ConsultRouter = express.Router()
 
@@ -20,5 +21,9 @@ ConsultRouter.post("/Consult-Profile-Photo3", SavingConsultProfilePhoto3);
 ConsultRouter.post("/Consult-College-ID-Photo", SavingConsultCollegeIDphoto);
 
 ConsultRouter.get("/Consult-Home-Profile-Section", fetchingDataForProfileScetion)
+
+ConsultRouter.post("/Adding-Availability", AddingTimings)
+ConsultRouter.get("/Fetching-Availability-Timing", FetchingTimings)
+ConsultRouter.delete("/Delete-Availability-Timing", deletingTimeData)
 
 export default ConsultRouter

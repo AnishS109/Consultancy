@@ -11,6 +11,7 @@ import DashRewards from "./Student/DashBoardPages/DashRewards";
 import C_DashHome from "./Consult/ConsultPages/C_DashHome";
 import C_DashProfile from "./Consult/ConsultPages/C_DashProfile";
 import ConsultProfile from "./Components/ConsultProfile";
+import C_Availability from "./Consult/ConsultPages/C_Availability";
 
 const Home = lazy(() => import("./Pages/Home"));
 const Login = lazy(() => import("./Pages/Login"));
@@ -76,6 +77,7 @@ function App() {
             <Route element={<ConsultantRoutes />}>
               <Route path="/consultant/dashboard/home" element={<C_DashHome />} />
               <Route path="/consultant/dashboard/profile" element={<C_DashProfile />} />
+              <Route path="/consultant/dashboard/availability" element={<C_Availability />} />
             </Route>
 
             {/*-------------------- ADMIN ROUTES --------------------------*/}

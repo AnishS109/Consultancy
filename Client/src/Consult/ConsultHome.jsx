@@ -8,6 +8,8 @@ import { ConsultDashProfileContent } from "./ConsultPages/C_DashProfile"
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import { FaRegClock } from "react-icons/fa";
+import { ConsultAvailabilityContent } from "./ConsultPages/C_Availability";
 
 const ConsultHome = () => {
 
@@ -22,6 +24,8 @@ const ConsultHome = () => {
         return <ConsultDashHomeContent />;
       case "profile":
         return <ConsultDashProfileContent />;
+      case "availability":
+        return <ConsultAvailabilityContent/>
     }
   };
 
@@ -63,6 +67,13 @@ onClick={() => navigate("/consultant/dashboard/profile")}
 variant="outlined"
 className={`normal-case w-[80%] text-stone-700 hover:bg-[#ece6db] border-none flex justify-start gap-4 ${activePage === "profile" ? "bg-[#ece6db]":""}`}>
 <span><AccountBoxIcon className="text-black"/></span><span className="text-[17px] font-semibold mt-[5px]">Profile</span>
+</Button>
+
+<Button
+onClick={() => navigate("/consultant/dashboard/availability")}
+variant="outlined"
+className={`normal-case w-[80%] text-stone-700 hover:bg-[#ece6db] border-none flex justify-start gap-4 ${activePage === "availability" ? "bg-[#ece6db]":""}`}>
+<span><FaRegClock className="text-black text-xl"/></span><span className="text-[17px] font-semibold mt-[5px]">Availability</span>
 </Button>
 
 </Box>
