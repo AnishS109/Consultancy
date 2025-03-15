@@ -9,11 +9,9 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa6";
 
-import Image from "../assets/images.jpg"
-
 const ConsultProfile = () => {
   
-  const {backendUrl} = useContext(DataContext)
+  const { backendUrl } = useContext(DataContext)
   const { id } = useParams()
 
 // ------------------ USE STATES --------------------
@@ -22,40 +20,54 @@ const ConsultProfile = () => {
   const [Category, setCategory] = useState("All")
   const [ConsultData, setConsultData] = useState({})
   const [loading, setLoading] = useState(false)
+  const [load, setLoad] = useState(false)
+  const [Email, setEmail] = useState("")
   const [ConsultAllData, setConsultAllData] = useState([])
-
-
-  const staticCardInfo = [
-    {
-      name:"Resume type",
-      des:"On call resume review",
-      mins:"45 mins",
-      contactType:"Video Meeting",
-      price:"500",
-      type:"1:1"
-    },
-    {
-      name:"Quick Chat About Anything!",
-      des:"Anyone can become a PM, just to be a good problem solver :)",
-      mins:"30 mins",
-      contactType:"Video Meeting",
-      price:"250",
-      type:"Priority"
-    }
-  ]
-
-  const SimilarProfileInfo = [
-    {
-      img: Image,
-      name:"Anish Saini",
-      des: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nobis, sit."
-    },
-    {
-      img: Image,
-      name:"Kunnu Saini",
-      des: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nobis, sit."
-    }
-  ]
+  const [package1, setPackage1] = useState({
+    name:"",
+    des:"",
+    mins:"",
+    contactType:"Video Meeting",
+    price:"",
+    id:"",
+    package:"Package1"
+  })
+  const [package2, setPackage2] = useState({
+    name:"",
+    des:"",
+    mins:"",
+    contactType:"Video Meeting",
+    price:"",
+    id:"",
+    package:"Package2"
+  })
+  const [package3, setPackage3] = useState({
+    name:"",
+    des:"",
+    mins:"",
+    contactType:"Video Meeting",
+    price:"",
+    id:"",
+    package:"Package3"
+  })
+  const [package4, setPackage4] = useState({
+    name:"",
+    des:"",
+    mins:"",
+    contactType:"Video Meeting",
+    price:"",
+    id:"",
+    package:"Package4"
+  })
+  const [priorityDM, setPriorityDM] = useState({
+    name:"",
+    des:"",
+    mins:"",
+    contactType:"Priority",
+    price:"",
+    id:"",
+    package:"PriorityDM"
+  })
 
   // ------------ FETCHING CONSULTANT DATA ---------------
 
@@ -69,9 +81,9 @@ const ConsultProfile = () => {
 
         if(response.status === 200){
           setConsultData(response.data)
+          setEmail(response.data.email)
         }
       } catch (error) {
-        console.log(error.response.data.message);
       } finally {
         setLoading(false)
       }
@@ -92,7 +104,77 @@ const ConsultProfile = () => {
       }
     }
     fetchConsultant()
-  },[id,backendUrl])
+  },[id,backendUrl,loading])
+
+  // ---------------- FETCHING PACKAGE DATA -------------
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoad(true)
+      if(Email !== ""){
+        const email = Email
+        try {
+          const response = await axios.get(`${backendUrl}/Consult/Fetching-Package-Details`, {
+            params: { email }
+          });
+  
+          if (response.status === 200) {
+            if(response.data.Package1Description){
+              setPackage1({...package1,
+                name:response.data.Package1Title,
+                des:response.data.Package1Description,
+                mins:response.data.Package1Time,
+                price:response.data.Package1Price,
+                id:response.data._id
+              })
+            }
+            if(response.data.Package2Description){
+              setPackage2({...package2,
+                name:response.data.Package2Title,
+                des:response.data.Package2Description,
+                mins:response.data.Package2Time,
+                price:response.data.Package2Price,
+                id:response.data._id
+              })
+            }
+            if(response.data.Package3Description){
+              setPackage3({...package3,
+                name:response.data.Package3Title,
+                des:response.data.Package3Description,
+                mins:response.data.Package3Time,
+                price:response.data.Package3Price,
+                id:response.data._id
+              })
+            }
+            if(response.data.Package4Description){
+              setPackage4({...package4,
+                name:response.data.Package4Title,
+                des:response.data.Package4Description,
+                mins:response.data.Package4Time,
+                price:response.data.Package4Price,
+                id:response.data._id
+              })
+            }
+            if(response.data.PriorityDMDescription){
+              setPriorityDM({...priorityDM,
+                name:response.data.PriorityDMTitle,
+                des:response.data.PriorityDMDescription,
+                mins:response.data.PriorityDMTime,
+                price:response.data.PriorityDMPrice,
+                id:response.data._id
+              })
+            }
+          }
+        } catch (error) {
+          // setMessageModal({open:true, message:error.response?.data?.message || "Check Your Conntection! Try Again Later", severity:"error"})
+        } finally {
+          setLoad(false)
+        }
+      }
+    };
+
+    fetchData();
+  }, [loading])
 
   return (
 <>
@@ -160,15 +242,49 @@ className={`border-black ${Category === "Priority" ? "bg-black text-white" :
 
 {/* ------------------- CATEGORY CARDS SECTION --------------------- */}
 
-<Box className="flex gap-3 flex-wrap justify-center mt-8">
-  {staticCardInfo
-  .filter((data) => Category === "All" || data.type === Category)
-  .map((data, idx) => (
-    <div key={idx}>
-      <CategoryCard data={data}/>
+{load ? (
+  <Box className="my-44">
+  <CircularProgress size={30} className="text-black"/>
+  </Box>
+) : (
+  <Box className="flex gap-3 flex-wrap justify-center mt-8">
+
+{(Category === "All" || Category === "1:1") && package1?.des && (
+   <div>
+     <CategoryCard data={package1} />
+   </div>
+)}
+
+
+{(Category === "All" || Category === "1:1") && package2?.des && (
+   <div>
+     <CategoryCard data={package2} />
+   </div>
+)}
+
+
+{(Category === "All" || Category === "1:1") && package3?.des && (
+   <div>
+     <CategoryCard data={package3} />
+   </div>
+)}
+
+
+{(Category === "All" || Category === "1:1") && package4?.des && (
+   <div>
+     <CategoryCard data={package4} />
+   </div>
+)}
+
+
+{ (Category === "All" || Category === "Priority") && priorityDM?.des && (
+    <div>
+      <CategoryCard data={priorityDM} />
     </div>
-  ))}
+)}
+
 </Box>
+)}
 
 {/* ------------------ SIMILAR PROFILE SECTION -------------------- */}
 
@@ -190,7 +306,12 @@ className={`border-black ${Category === "Priority" ? "bg-black text-white" :
 
   <Box className="mt-8 flex gap-4">
     {ConsultAllData.map((data,idx) => (
-      <NavLink to={`/Profile/${data._id}?name=${data.name}`}>
+      <NavLink to={`/Profile/${data._id}?name=${data.name}`} 
+      onClick={(e) => {
+        setTimeout(() => {
+          window.location.reload();
+        }, 100); 
+      }}>
       <div key={idx}>
       <SimilarProfileCard data={data}/>
       </div>
@@ -237,6 +358,14 @@ export default ConsultProfile
 
 export const CategoryCard = ({data}) => {
 
+  const navigate = useNavigate()
+
+// ------------- HANDLING TO PARTICULAR PACKAGE ROUTE -----------
+
+  const handleRoute = (id,name, packages) => {
+    navigate(`/${packages}/${id}`)
+  }
+
   return (
 <>
 <Box className="flex flex-col items-start py-4 sm:py-6 md:py-8 px-4 sm:px-6 md:px-8 bg-white rounded-[20px] w-[90vw] md:w-[40vw] lg:w-[30vw] h-fit">
@@ -245,7 +374,7 @@ export const CategoryCard = ({data}) => {
     {data.name}
   </Typography>
 
-  <Typography className='text-[#8b8b8b] mt-3 md:mt-4'>
+  <Typography className='text-[#8b8b8b] mt-3 md:mt-4 line-clamp-2'>
     {data.des}
   </Typography>
 
@@ -255,7 +384,7 @@ export const CategoryCard = ({data}) => {
 
     <Box className="flex flex-col">
       <Typography className="font-semibold text-[#3a3a3b]">
-        {data.mins}
+        {data.mins} mins
       </Typography>
       <Typography className="text-gray-500 text-sm">
         {data.contactType}
@@ -266,8 +395,9 @@ export const CategoryCard = ({data}) => {
     <Button
     variant='outlined'
     className='rounded-[20px] text-black text-lg border-black hover:bg-black hover:text-white transition-all'
+    onClick={() => handleRoute(data.id,data.name, data.package)}
     >
-      ₹{data.price} <span className='ml-2'><FaArrowRight/></span>
+      ${data.price} <span className='ml-2'><FaArrowRight/></span>
     </Button>
   </Box>
 

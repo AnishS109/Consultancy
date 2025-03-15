@@ -12,6 +12,7 @@ import C_DashHome from "./Consult/ConsultPages/C_DashHome";
 import C_DashProfile from "./Consult/ConsultPages/C_DashProfile";
 import ConsultProfile from "./Components/ConsultProfile";
 import C_Availability from "./Consult/ConsultPages/C_Availability";
+import C_Package from "./Consult/ConsultPages/C_Package";
 
 const Home = lazy(() => import("./Pages/Home"));
 const Login = lazy(() => import("./Pages/Login"));
@@ -21,6 +22,7 @@ const StudentHome = lazy(() => import("./Student/StudentHome"));
 const AdminHome = lazy(() => import("./Admin/AdminHome"));
 const StudentRegister = lazy(() => import("./Pages/StudentRegister"));
 const ConsultantRegister = lazy(() => import("./Pages/ConsultantRegister"));
+const ConsultPackage = lazy(() => import("./Components/ConsultPackage"));
 // const ContactUs = lazy(() => import("./Pages/ContactUs"));
 // const About = lazy(() => import("./Pages/About"));
 // const Register = lazy(() => import("./Pages/Register"));
@@ -61,6 +63,7 @@ function App() {
             <Route path="/Consultant/Register" element={<ConsultantRegister />} />
             <Route path="/ForgotPassword" element={<ForgotPassword />} />
             <Route path="/Profile/:name?/:id" element={<ConsultProfile />} />
+            <Route path="/:Package/:id" element={<ConsultPackage />} />
 
             {/* ------------------- PROTECTED ROUTES ----------------------- */}
             
@@ -78,6 +81,7 @@ function App() {
               <Route path="/consultant/dashboard/home" element={<C_DashHome />} />
               <Route path="/consultant/dashboard/profile" element={<C_DashProfile />} />
               <Route path="/consultant/dashboard/availability" element={<C_Availability />} />
+              <Route path="/consultant/dashboard/package" element={<C_Package />} />
             </Route>
 
             {/*-------------------- ADMIN ROUTES --------------------------*/}

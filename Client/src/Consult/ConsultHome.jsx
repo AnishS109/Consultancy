@@ -4,12 +4,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { ConsultDashHomeContent } from "./ConsultPages/C_DashHome"
 import { ConsultDashProfileContent } from "./ConsultPages/C_DashProfile"
+import { C_package_content } from "./ConsultPages/C_Package";
+import { ConsultAvailabilityContent } from "./ConsultPages/C_Availability";
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { FaRegClock } from "react-icons/fa";
-import { ConsultAvailabilityContent } from "./ConsultPages/C_Availability";
+import { FiPackage } from "react-icons/fi";
 
 const ConsultHome = () => {
 
@@ -26,6 +28,8 @@ const ConsultHome = () => {
         return <ConsultDashProfileContent />;
       case "availability":
         return <ConsultAvailabilityContent/>
+      case "package":
+        return <C_package_content/>
     }
   };
 
@@ -74,6 +78,13 @@ onClick={() => navigate("/consultant/dashboard/availability")}
 variant="outlined"
 className={`normal-case w-[80%] text-stone-700 hover:bg-[#ece6db] border-none flex justify-start gap-4 ${activePage === "availability" ? "bg-[#ece6db]":""}`}>
 <span><FaRegClock className="text-black text-xl"/></span><span className="text-[17px] font-semibold mt-[5px]">Availability</span>
+</Button>
+
+<Button
+onClick={() => navigate("/consultant/dashboard/package")}
+variant="outlined"
+className={`normal-case w-[80%] text-stone-700 hover:bg-[#ece6db] border-none flex justify-start gap-4 ${activePage === "package" ? "bg-[#ece6db]":""}`}>
+<span><FiPackage className="text-black text-2xl"/></span><span className="text-[17px] font-semibold mt-[5px]">Package</span>
 </Button>
 
 </Box>

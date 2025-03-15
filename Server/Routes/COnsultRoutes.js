@@ -3,6 +3,7 @@ import { fetchProfileData, fetchingDataForProfileScetion, updatingProfileData } 
 import uploadImg from "../utils/uploadImg.js"
 import { getImage, SavingConsultCollegeIDphoto, SavingConsultProfilePhoto1, SavingConsultProfilePhoto2, SavingConsultProfilePhoto3, UploadImage } from "../Controllers/Consultant/ImageController.js"
 import { AddingTimings, FetchingTimings, deletingTimeData } from "../Controllers/Consultant/Availability.js"
+import {addPackageDetails, fetchPackages, fetchPackagesById} from "../Controllers/Consultant/Package.js"
 
 const ConsultRouter = express.Router()
 
@@ -25,5 +26,10 @@ ConsultRouter.get("/Consult-Home-Profile-Section", fetchingDataForProfileScetion
 ConsultRouter.post("/Adding-Availability", AddingTimings)
 ConsultRouter.get("/Fetching-Availability-Timing", FetchingTimings)
 ConsultRouter.delete("/Delete-Availability-Timing", deletingTimeData)
+
+ConsultRouter.post("/Adding-Package-Details", addPackageDetails)
+ConsultRouter.get("/Fetching-Package-Details", fetchPackages)
+ConsultRouter.get("/Fetching-Package-Details-By-ID", fetchPackagesById)
+
 
 export default ConsultRouter

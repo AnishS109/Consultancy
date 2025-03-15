@@ -6,7 +6,7 @@ const DataProvider = ({ children }) => {
 
   // https://consultancy-uyf6.onrender.com
 
-  const backendUrl = "https://consultancy-uyf6.onrender.com";
+  const backendUrl = "http://localhost:5000";
 
   // ----------------------------------------------------------------------------
   
