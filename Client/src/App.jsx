@@ -11,7 +11,7 @@ import DashRewards from "./Student/DashBoardPages/DashRewards";
 import C_DashHome from "./Consult/ConsultPages/C_DashHome";
 import C_DashProfile from "./Consult/ConsultPages/C_DashProfile";
 import ConsultProfile from "./Components/ConsultProfile";
-import C_Availability from "./Consult/ConsultPages/C_Availability";
+import C_Availability from "./Consult/ConsultPages/C_Availability"
 import C_Package from "./Consult/ConsultPages/C_Package";
 
 const Home = lazy(() => import("./Pages/Home"));
