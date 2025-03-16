@@ -186,7 +186,7 @@ const ConsultProfile = () => {
 
 {/* ------------- PROFILE PHOTO SECTION ----------------- */}
 
-<Box className="bg-[#d5534d] h-fit pb-6 md:pb-0 md:h-screen  w-screen md:w-[35vw] flex flex-col items-start md:items-center gap-3 md:gap-6 md:sticky top-0 z-10 static">
+<Box className="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-950 h-fit pb-6 md:pb-0 md:h-screen  w-screen md:w-[35vw] flex flex-col items-start md:items-center gap-3 md:gap-6 md:sticky top-0 z-10 static">
 
 {loading ? (
   <Box className="mt-12 md:mt-24 ml-10 md:ml-0">
@@ -200,11 +200,11 @@ const ConsultProfile = () => {
   </>
 )}
   
-  <Typography className='text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-wide ml-8 md:ml-0'>
+  <Typography className='text-2xl text-gray-200 sm:text-3xl md:text-4xl font-extrabold tracking-wide ml-8 md:ml-0'>
     {ConsultData.name}
   </Typography>
 
-  <Typography className='text-lg md:text-xl font-semibold mx-8 text-justify'>
+  <Typography className='text-lg text-gray-300 md:text-xl font-semibold mx-8 text-justify'>
     {ConsultData.consultAbout}
   </Typography>
   

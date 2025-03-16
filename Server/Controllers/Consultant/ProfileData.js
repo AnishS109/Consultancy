@@ -1,3 +1,4 @@
+import availabilitySchema from "../../Models/Consultant/availabilitySchema.js"
 import UserRegisterSchema from "../../Models/userRegisterSchema.js"
 
 // ---------------------- FETCHING PROFILE DATA ----------------------
@@ -79,6 +80,42 @@ export const fetchingDataForProfileScetion = async(req, res) => {
     }
 
     return res.status(200).json(data)
+  } catch (error) {
+    return res.status(500).json({message:"Something went wrong! Try again later"})
+  }
+}
+
+// --------------------- FETCHING PROFILE PHOTO ------------------
+
+export const fetchProfilePhoto = async(req, res) => {
+  const { email } = req.query
+
+  try {
+    const data = await UserRegisterSchema.findOne({email})
+
+    if(!data){
+      return res.status(404).json({message:"Consultant account may deleted or disabled"})
+    }
+
+    return res.status(200).json(data.consultProfilePhoto1)
+  } catch (error) {
+    return res.status(500).json({message:"Something went wrong! Try again later"})
+  }
+}
+
+// ----------------- FETCHING AVAILABILITY ---------------------
+
+export const fetchAvailability = async(req, res) => {
+  const { email } = req.query
+
+  try {
+    const data = await availabilitySchema.findOne({email})
+
+    if(!data){
+      return res.status(404).json({message:"Consultant account may deleted or disabled"})
+    }
+
+    return res.status(200).json(data.Availability)
   } catch (error) {
     return res.status(500).json({message:"Something went wrong! Try again later"})
   }

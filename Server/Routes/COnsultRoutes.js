@@ -1,5 +1,5 @@
 import express from "express"
-import { fetchProfileData, fetchingDataForProfileScetion, updatingProfileData } from "../Controllers/Consultant/ProfileData.js"
+import { fetchAvailability, fetchProfileData, fetchProfilePhoto, fetchingDataForProfileScetion, updatingProfileData } from "../Controllers/Consultant/ProfileData.js"
 import uploadImg from "../utils/uploadImg.js"
 import { getImage, SavingConsultCollegeIDphoto, SavingConsultProfilePhoto1, SavingConsultProfilePhoto2, SavingConsultProfilePhoto3, UploadImage } from "../Controllers/Consultant/ImageController.js"
 import { AddingTimings, FetchingTimings, deletingTimeData } from "../Controllers/Consultant/Availability.js"
@@ -30,6 +30,9 @@ ConsultRouter.delete("/Delete-Availability-Timing", deletingTimeData)
 ConsultRouter.post("/Adding-Package-Details", addPackageDetails)
 ConsultRouter.get("/Fetching-Package-Details", fetchPackages)
 ConsultRouter.get("/Fetching-Package-Details-By-ID", fetchPackagesById)
+
+ConsultRouter.get("/Fetching-Profile-Photo", fetchProfilePhoto)
+ConsultRouter.get("/Fetching-Availability", fetchAvailability)
 
 
 export default ConsultRouter
