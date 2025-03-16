@@ -6,7 +6,7 @@ import os from "os";
 
 import DBConnection from "./Database/database.js";
 import Router from "./Routes/Router.js";
-import ConsultRouter from "./Routes/ConsultRoutes.js";
+import ConsultRouter from "./Routes/COnsultRoutes.js";
 import StudentRouter from "./Routes/StudentRouter.js";
 
 dotenv.config();
