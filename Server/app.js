@@ -1,30 +1,50 @@
-import express from "express"
-import cors from "cors"
-import dotenv from "dotenv"
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import cluster from "cluster";
+import os from "os";
 
-import DBConnection from "./Database/database.js"
+import DBConnection from "./Database/database.js";
+import Router from "./Routes/Router.js";
+import ConsultRouter from "./Routes/ConsultRoutes.js";
+import StudentRouter from "./Routes/StudentRouter.js";
 
-import Router from "./Routes/Router.js"
-import ConsultRouter from "./Routes/COnsultRoutes.js"
-import StudentRouter from "./Routes/StudentRouter.js"
-dotenv.config()
+dotenv.config();
 
-const app = express()
+const numCPUs = os.cpus().length; // Get the number of CPU cores
 
-const StartServer = () => {
+if (cluster.isPrimary) {
+  console.log(`Primary process ${process.pid} is running`);
 
-  app.use(cors())
+  // Fork workers for each core
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
 
-  app.use("/", Router)
-  app.use("/Consult", ConsultRouter)
-  app.use("/Student", StudentRouter)
+  // Restart a worker if it crashes
+  cluster.on("exit", (worker, code, signal) => {
+    console.log(`Worker ${worker.process.pid} died. Restarting...`);
+    cluster.fork();
+  });
 
-  const PORT = process.env.PORT_NUMBER
-  app.listen(PORT,() => {
-    console.log(`http://localhost:${PORT}`)
-  })
+} else {
+  // Worker processes run the server
+  const app = express();
 
-DBConnection()
+  const StartServer = () => {
+    app.use(cors());
+
+    app.use("/", Router);
+    app.use("/Consult", ConsultRouter);
+    app.use("/Student", StudentRouter);
+
+    const PORT = process.env.PORT_NUMBER || 3000;
+    app.listen(PORT, () => {
+      console.log(`Worker ${process.pid} running at http://localhost:${PORT}`);
+    });
+
+    DBConnection();
+  };
+
+  StartServer();
 }
-
-StartServer()
