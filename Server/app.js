@@ -2,7 +2,10 @@ import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
 
-import DBConnection from "./Database/database.js"
+import DBConnection from "./Database/database.js";
+import Router from "./Routes/Router.js";
+import ConsultRouter from "./Routes/COnsultRoutes.js";
+import StudentRouter from "./Routes/StudentRouter.js";
 
 import Router from "./Routes/Router.js"
 import ConsultRouter from "./Routes/COnsultRoutes.js"
