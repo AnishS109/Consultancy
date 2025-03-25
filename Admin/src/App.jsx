@@ -1,10 +1,9 @@
-import React, { lazy, Suspense, useContext } from "react";
-import { BrowserRouter, Routes, Route, Outlet, Navigate } from "react-router-dom";
+import React, { lazy, Suspense } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Box, CircularProgress } from "@mui/material";
 
 const Login = lazy(() => import("./pages/Login"))
 const Register = lazy(() => import("./pages/Register"))
-const ForgotPassword = lazy(() => import("./pages/ForgotPassword"))
 
 function App() {
 
@@ -20,7 +19,6 @@ function App() {
     <Routes>
 
       <Route path="/" element={<Login/>}/>
-      <Route path="/ForgotPassword" element={<ForgotPassword/>}/>
       <Route path="/Register" element={<Register/>}/>
 
     </Routes>

@@ -109,14 +109,8 @@ className="text-white font-bold bg-black normal-case w-full rounded-[6px] h-10 m
   Login
 </Button>
 
-<NavLink to={"/ForgotPassword"}>
-<Typography className="text-[#008060] font-bold mt-8 text-[13px] sm:text-[17px] hover:underline">
-  Forgot Password
-</Typography>
-</NavLink>
-
 <NavLink to={"/Register"}>
-<Typography className="text-[#008060] font-bold mt-3 text-[13px] sm:text-[17px] hover:underline">
+<Typography className="text-[#008060] font-bold mt-6 text-[13px] sm:text-[17px] hover:underline">
   Register New Account
 </Typography>
 </NavLink>
