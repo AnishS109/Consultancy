@@ -5,8 +5,9 @@ export const DataContext = createContext(null);
 const DataProvider = ({ children }) => {
 
   // http://localhost:5001
+  // https://consultancy-admin-backend.onrender.com
 
-  const backendUrl = "http://localhost:5001";
+  const backendUrl = "https://consultancy-admin-backend.onrender.com"
 
   // ----------------------------------------------------------------------------
 
