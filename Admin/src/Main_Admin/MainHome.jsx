@@ -37,7 +37,7 @@ const MainHome = () => {
 <Box className="flex flex-col items-center gap-4">
 
 <Typography className="bg-[#ece6db] w-fit p-3 px-10 text-nowrap rounded-[10px] text-[14px] text-stone-700  font-semibold mt-5"> 
-<span><DashboardIcon className="text-[18px] mb-[2px] text-[#8c5300]"/></span> Consultant Dashboard
+<span><DashboardIcon className="text-[18px] mb-[2px] text-[#8c5300]"/></span> Admin Dashboard
 </Typography>
 
 <Typography className="text-3xl font-bold tracking-tight">

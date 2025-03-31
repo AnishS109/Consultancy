@@ -12,7 +12,7 @@ const DataProvider = ({ children }) => {
 
   const [account, setAccount] = useState(() => {
     const savedAccount = sessionStorage.getItem("account");
-    return savedAccount ? JSON.parse(savedAccount) : { type: "", accesstoken:"", refreshtoken:"", email:"", name:"" };
+    return savedAccount ? JSON.parse(savedAccount) : { type: "", accesstoken:"", refreshtoken:"", email:"", name:"", edit:"", delete:"" };
   });
 
   useEffect(() => {
@@ -20,6 +20,7 @@ const DataProvider = ({ children }) => {
       sessionStorage.setItem("account", JSON.stringify(account));
     }
   }, [account]);  
+
 
   return (
     <DataContext.Provider

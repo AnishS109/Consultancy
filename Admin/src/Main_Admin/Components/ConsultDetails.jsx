@@ -2,23 +2,25 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { DataContext } from '../../Context/DataProvider';
 import axios from 'axios';
-import { Alert, CircularProgress, Snackbar, Card, CardContent, Typography, Avatar, Grid, Modal, Box } from '@mui/material';
+import { Alert, CircularProgress, Snackbar, Card, CardContent, Typography, Avatar, Grid, Modal, Box, Button, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 
 const ConsultDetails = () => {
 
   const { id } = useParams();
-  const { backendUrl } = useContext(DataContext);
+  const { backendUrl, account } = useContext(DataContext);
 
 // ------------------ USE STATES ---------------
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [delLoad, setDelLoad] = useState(false);
   const [modalMsg, setModalMsg] = useState({
     open: false,
     message: '',
     severity: '',
   });
   const [open, setOpen] = useState(false)
+  const [verifyLoad, setVerifyLoad] = useState(false)
 
 // ----------------- FETCHING CONSULT DATA --------------
 
@@ -41,7 +43,7 @@ const ConsultDetails = () => {
       }
     };
     fetchData();
-  }, [backendUrl, id]);
+  }, [backendUrl, id, delLoad, verifyLoad]);
 
 // ----------------- LOADER ---------------
 
@@ -59,9 +61,75 @@ const ConsultDetails = () => {
     return <div className="text-center text-lg font-semibold mt-10">No Data Available</div>;
   }
 
+// ------------------- HANDLE COLLEGE ID DELETE ---------------------
+
+  const handleDelete =  async() => {
+    const serverData = {
+      email:data.email
+    }
+    setDelLoad(true)
+    try {
+      const response = await axios.delete(`${backendUrl}/MainAdmin/Delete-College-Id`,{
+        params: {email:data.email}
+      })
+      if(response.status === 200){
+        setModalMsg({
+          message: response.data.message,
+          open: true,
+          severity: 'success',
+        });
+      }
+    } catch (error) {
+      setModalMsg({
+        message: error.response?.data?.message || 'Check your connection. Try later!',
+        open: true,
+        severity: 'error',
+      });
+    } finally {
+      setDelLoad(false)
+    }
+  }
+
+// -------------------- HANDLE PROFILE VERIFICATION --------------------
+
+  const handleVerify = async(verify) => {
+
+    const serverData = {
+      isVerified:verify,
+      email:data.email
+    }
+
+    setVerifyLoad(true)
+
+    if(!account.edit && !account.type){
+      setModalMsg({message:"You are not eligible to verify profile", open:true, severity:"error"})
+      setVerifyLoad(false)
+      return
+    }
+
+    try {
+      const response = await axios.post(`${backendUrl}/MainAdmin/Profile-Verification`, serverData)
+      if(response.status === 200){
+        setModalMsg({
+          message: response.data.message,
+          open: true,
+          severity: 'success',
+        });
+      }
+    } catch (error) {
+      setModalMsg({
+        message: error.response?.data?.message || 'Check your connection. Try later!',
+        open: true,
+        severity: 'error',
+      }); 
+    } finally {
+      setVerifyLoad(false)
+    }
+  }
+
   return (
     <div className="w-screen h-screen p-4 md:p-8 bg-gray-100 flex flex-col items-center overflow-y-auto">
-      <Card className="w-full max-w-4xl p-4 md:p-6 bg-white shadow-lg rounded-xl overflow-y-auto">
+      <Card className="w-full p-4 md:p-6 bg-white shadow-lg rounded-xl overflow-y-auto">
         <CardContent>
           <Typography variant="h4" className="text-center font-bold mb-6">Consultant Details</Typography>
           
@@ -99,9 +167,24 @@ const ConsultDetails = () => {
 
           {/* College ID */}
           {data.consultCollegeID && (
-            <div className="mb-6 text-center" onClick={() => setOpen(true)}>
+            <div className="mb-6 text-center">
               <Typography variant="h6" className="font-semibold border-b pb-2 mb-4">College ID</Typography>
-              <img src={data.consultCollegeID} alt="College ID" className="w-48 h-auto mx-auto shadow-md rounded-md" />
+              <img onClick={() => setOpen(true)} src={data.consultCollegeID} alt="College ID" className="cursor-pointer w-48 h-auto mx-auto shadow-md rounded-md" />
+            {(account.delete === true || account.type === true) && (
+              <>
+              {delLoad ? (
+                <>
+                <CircularProgress className='text-black mt-4' size={30}/>
+                </>
+              ) : (
+                <Button 
+                onClick={handleDelete}
+                className='text-black border-black normal-case text-sm mt-4' variant='outlined'>
+                  Delete
+                </Button>
+                )}
+              </>
+            )}
             </div>
           )}
 
@@ -112,7 +195,7 @@ const ConsultDetails = () => {
               <Grid item xs={12} md={6}><b>University Name:</b> {data.consultUniversityName}</Grid>
               <Grid item xs={12} md={6}><b>College Name:</b> {data.consultCollegeName}</Grid>
               <Grid item xs={12} md={6}><b>College Major:</b> {data.consultCollegeMajor}</Grid>
-              <Grid item xs={12} md={6}><b>Sem Fees:</b> {data.consultSemFees}</Grid>
+              <Grid item xs={12} md={6}><b>Sem Fees:</b> ${data.consultSemFees}</Grid>
               <Grid item xs={12} md={6}><b>Admission Date:</b> {new Date(data.consultAdmissionDate).toDateString()}</Grid>
               <Grid item xs={12} md={6}><b>Exams Given:</b> {data.consultExamsGiven.join(', ')}</Grid>
               <Grid item xs={12} md={6}><b>Loan Amount:</b> ${data.consultBankLoan}</Grid>
@@ -126,7 +209,7 @@ const ConsultDetails = () => {
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}><b>Bank Account Holder:</b> {data.consultBankAccHolderName}</Grid>
               <Grid item xs={12} md={6}><b>Account Number:</b> {data.consultBankAccNumber}</Grid>
-              <Grid item xs={12} md={6}><b>IAN Number:</b> ${data.consultBankIANnumber}</Grid>
+              <Grid item xs={12} md={6}><b>IAN Number:</b> {data.consultBankIANnumber}</Grid>
               <Grid item xs={12} md={6}><b>Swift Code:</b> {data.consultBankSwiftCode}</Grid>
             </Grid>
           </div>
@@ -142,6 +225,39 @@ const ConsultDetails = () => {
         </div>
 
         </CardContent>
+
+{/* -------------------------- PROFILE VERIFY CHECK BOX ------------------------- */}
+
+{data.isVerified ? (
+  <Box className="w-full flex justify-center mt-4">
+    {verifyLoad ? (
+      <CircularProgress size={30} className='text-black'/>
+    ) : (
+      <Button
+      onClick={() => handleVerify(false)}
+      variant='contained'
+      className="bg-red-400 font-bold normal-case text-black"
+      >
+        Un-Veriry this profile
+      </Button>
+    )}
+  </Box>
+) : (
+  <Box className="w-full flex justify-center mt-4">
+    {verifyLoad ? (
+      <CircularProgress size={30} className='text-black'/>
+    ) : (
+      <Button
+      onClick={() => handleVerify(true)}
+      variant='contained'
+      className="bg-green-400 font-bold normal-case text-black"
+      >
+        Veriry this profile
+      </Button>
+    )}
+  </Box>
+)}
+
       </Card>
 
       {/* Snackbar */}
@@ -151,41 +267,41 @@ const ConsultDetails = () => {
         </Alert>
       </Snackbar>
 
-{/* ---------------------------- COLLEGE ID MODAL -------------------------- */}
+  {/* ---------------------------- COLLEGE ID MODAL -------------------------- */}
 
-<Modal open={open} onClose={() => setOpen(false)} aria-labelledby="verification-modal">
-  <Box className="relative top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-lg rounded-lg w-[90vw] h-[80vh]">
-    <button
-      onClick={() => setOpen(false)}
-      className="absolute top-2 right-2 text-gray-600 bg-white hover:text-gray-800"
-      aria-label="Close"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
+  <Modal open={open} onClose={() => setOpen(false)} aria-labelledby="verification-modal">
+    <Box className="relative top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-lg rounded-lg w-[90vw] h-[80vh]">
+      <button
+        onClick={() => setOpen(false)}
+        className="absolute top-2 right-2 text-gray-600 bg-white hover:text-gray-800"
+        aria-label="Close"
       >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M6 18L18 6M6 6l12 12"
-        />
-      </svg>
-    </button>
-    {data.consultCollegeID && (
-      <div className="text-center">
-        <img
-          src={data.consultCollegeID}
-          alt="College ID"
-          className="w-[90vw] h-[80vh] mx-auto shadow-md rounded-md"
-        />
-      </div>
-    )}
-  </Box>
-</Modal>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+      {data.consultCollegeID && (
+        <div className="text-center">
+          <img
+            src={data.consultCollegeID}
+            alt="College ID"
+            className="w-[90vw] h-[80vh] mx-auto shadow-md rounded-md"
+          />
+        </div>
+      )}
+    </Box>
+  </Modal>
 
     </div>
   );

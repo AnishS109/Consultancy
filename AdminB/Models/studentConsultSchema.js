@@ -108,7 +108,7 @@ const userRegisterSchema = new mongoose.Schema({
     type:String
   },
   consultCollegeName:{
-    type:Number
+    type:String
   },
   consultUniversityName:{
     type:String

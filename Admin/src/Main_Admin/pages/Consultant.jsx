@@ -56,6 +56,7 @@ export const ConsultantCOntent = () => {
       <TableCell><Typography variant="body1" fontWeight="bold">ID</Typography></TableCell>
       <TableCell><Typography variant="body1" fontWeight="bold">Name</Typography></TableCell>
       <TableCell><Typography variant="body1" fontWeight="bold">Email</Typography></TableCell>
+      <TableCell><Typography variant="body1" fontWeight="bold">Verified</Typography></TableCell>
     </TableRow>
   </TableHead>
   <TableBody>
@@ -69,6 +70,7 @@ export const ConsultantCOntent = () => {
       <TableCell>{idx + 1}</TableCell>
       <TableCell>{con.name}</TableCell>
       <TableCell>{con.email}</TableCell>
+      <TableCell>{con.isVerified ? "Verified" : "Not Verified"}</TableCell>
     </TableRow>
     ))}
       </TableBody>

@@ -63,7 +63,9 @@ export const userLogin = async(req, res) => {
           refreshToken,
           type:user.type,
           email: user.email,
-          name: user.name
+          name: user.name,
+          edit:user.edit,
+          delete:user.delete
         });
       } else {
         return res.status(400).json({ message: "Password is Incorrect" });

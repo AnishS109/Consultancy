@@ -204,7 +204,7 @@ const ConsultProfile = () => {
     {ConsultData.name}
   </Typography>
 
-  <Typography className='text-lg text-gray-300 md:text-xl font-semibold mx-8 text-justify'>
+  <Typography className='text-lg text-gray-300 md:text-sm font-semibold mx-8 text-justify'>
     {ConsultData.consultAbout}
   </Typography>
   
