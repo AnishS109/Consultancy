@@ -1,35 +1,61 @@
-import { Box, Button, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import axios from 'axios';
+import { Alert, Box, Button, CircularProgress, Snackbar, TextField, Typography } from '@mui/material'
+import React, { useContext, useState } from 'react'
+import { DataContext } from "../Context/DataProvider"
 
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
-// -------------------- USESTATES ----------------------
+  const navigate = useNavigate()
+  const { backendUrl, setAccount } = useContext(DataContext)
+
+  // -------------------- USESTATES ----------------------
 
   const [login,setLogin] = useState({
     email:"",
     password:""
   })
+  const [modalMsg, setModalMsg] = useState({
+    open: false,
+    message: "",
+    severity: "",
+  });
+  const [load, setLoad] = useState(false)
   const [showPassword, setShowPassword] = useState(false);
 
-// ----------------- HANDLE CHANGING -------------------
+  // ----------------- HANDLE CHANGING -------------------
 
   const handleChange = (e) => {
     const { name, value } = e.target
     setLogin({...login, [name]:value})
   }
 
-// ----------------- HANDLE SUBMIT -------------------
+  // ----------------- HANDLE SUBMIT -------------------
 
-const handleSubmit = () => {
-  console.log(login)
-}
+  const handleSubmit = async() => {
+    setLoad(true)
+    try {
+      const response = await axios.post(`${backendUrl}/Login`, login);
+      if (response.status === 200) {
+        setAccount(response.data);
+        if (response.data.type === false) {
+          navigate("/Consultants");
+        } else if (response.data.type === true) {
+          navigate("/Admin");
+        }
+      }
+    } catch (error) {
+      setModalMsg({message:error.response.data.message, open:true, severity:"error"});
+    } finally {
+      setLoad(false)
+    }
+  }
 
   return (
 <>
@@ -101,13 +127,20 @@ sx={{
 
 {/* -------------------- LOGIN BUTTON ------------------------- */}
 
-<Button
-onClick={handleSubmit}
-variant="contained"
-disabled={!login.email || !login.password}
-className="text-white font-bold bg-black normal-case w-full rounded-[6px] h-10 mt-8">
-  Login
-</Button>
+{load ? (
+  <>
+    <CircularProgress className="text-black mt-8" size={30} />
+  </>
+) : 
+(
+  <Button
+  onClick={handleSubmit}
+  variant="contained"
+  disabled={!login.email || !login.password}
+  className="text-white font-bold bg-black normal-case w-full rounded-[6px] h-10 mt-8">
+    Login
+  </Button>
+)}
 
 <NavLink to={"/Register"}>
 <Typography className="text-[#008060] font-bold mt-6 text-[13px] sm:text-[17px] hover:underline">
@@ -116,6 +149,25 @@ className="text-white font-bold bg-black normal-case w-full rounded-[6px] h-10 m
 </NavLink>
 
 </Box>
+
+{/* --------------------------------- SNACKBAR --------------------------- */}
+{/* --------------------------------- SNACKBAR --------------------------- */}
+{/* --------------------------------- SNACKBAR --------------------------- */}
+
+<Snackbar
+  open={modalMsg.open}
+  autoHideDuration={3000}
+  onClose={() => setModalMsg({ ...modalMsg, open: false })}
+  anchorOrigin={{ vertical: "top", horizontal: "center" }}
+>
+  <Alert
+    onClose={() => setModalMsg({ ...modalMsg, open: false })}
+    severity={modalMsg.severity}
+    sx={{ width: "100%" }}
+  >
+    <b>{modalMsg.message}</b>
+  </Alert>
+</Snackbar>
   
 </Box>
 </>

@@ -2,17 +2,17 @@ import { createContext, useEffect, useState } from "react";
 
 export const DataContext = createContext(null);
 
-const DataProvider = ({ children }) => {  
+const DataProvider = ({ children }) => {
 
-  // https://consultancy-uyf6.onrender.com
+  // http://localhost:5001
 
-  const backendUrl = "http://localhost:5000";
+  const backendUrl = "http://localhost:5001";
 
   // ----------------------------------------------------------------------------
-  
+
   const [account, setAccount] = useState(() => {
     const savedAccount = sessionStorage.getItem("account");
-    return savedAccount ? JSON.parse(savedAccount) : { name: "", role: "", accesstoken:"", refreshtoken:"", email:"" };
+    return savedAccount ? JSON.parse(savedAccount) : { type: "", accesstoken:"", refreshtoken:"", email:"", name:"" };
   });
 
   useEffect(() => {
@@ -20,18 +20,17 @@ const DataProvider = ({ children }) => {
       sessionStorage.setItem("account", JSON.stringify(account));
     }
   }, [account]);  
-  
-  // ----------------------------------------------------------------------------
 
   return (
-    <DataContext.Provider value={{
-      backendUrl,
-      account,
-      setAccount
-    }}>
-      {children}  
+    <DataContext.Provider
+      value={{
+        backendUrl,
+        account,
+        setAccount
+      }}
+    >
+      {children}
     </DataContext.Provider>
   );
-}
-
+};
 export default DataProvider;

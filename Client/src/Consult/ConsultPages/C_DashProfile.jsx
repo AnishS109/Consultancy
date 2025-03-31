@@ -1,6 +1,6 @@
 import React, { useState, useRef, useContext, useEffect } from 'react'
 import ConsultHome from '../ConsultHome'
-import { Alert, Autocomplete, Avatar, Badge, Box, Button, Chip, CircularProgress, FormControl, InputLabel, MenuItem, Select, Snackbar, TextField, Typography, Popper } from '@mui/material'
+import { Alert, Autocomplete, Avatar, Badge, Box, Button, Chip, CircularProgress, FormControl, InputLabel, MenuItem, Select, Snackbar, TextField, Typography, Popper, Modal } from '@mui/material'
 import { DataContext } from '../../Context/DataProvider'
 import axios from "axios"
 
@@ -114,6 +114,10 @@ export const ConsultDashProfileContent = () => {
   const [photo2, setPhoto2] = useState("")
   const [photo3, setPhoto3] = useState("")
   const [collegeID, setCollegeID] = useState("")
+  const [open, setOpen] = useState(false)
+  const [isSubmitted, setIsSubmited] = useState(null)
+  const [isVerified, setIsVerified] = useState(null)
+  const [verifyLoad, setVerifyLoad] = useState(false)
 
 // ------------------ FOR DOWNWARDING AUTOCOMPLETE --------------------
 
@@ -167,6 +171,8 @@ useEffect(() => {
         setProfileData({...response.data, 
           consultDOB : response.data.consultDOB ? response.data.consultDOB.split("T")[0] : "",
           consultAdmissionDate : response.data.consultAdmissionDate ? response.data.consultAdmissionDate.split("T")[0] : ""})
+          setIsSubmited(response.data.underVerification);
+          setIsVerified(response.data.isVerified);
       }
     } catch (error) {
       setMessageModal({open:true, message:error.response?.data?.message || "Check Your Conntection! Try Again Later", severity:"error"})
@@ -175,7 +181,7 @@ useEffect(() => {
     }
   }
   fteching()
-},[updateLoading, photo1Loading, photo2Loading, photo3Loading])
+},[updateLoading, photo1Loading, photo2Loading, photo3Loading, verifyLoad])
 
 // --------------- HANDLE UPLOAD PROFILE IMAGE 1 -------------
 
@@ -356,7 +362,6 @@ const UploadCollegeID = async(img) => {
     role:account.role,
     img:img,
   }
-console.log("start");
   try {
     const response = await axios.post(`${backendUrl}/Consult/Consult-College-ID-Photo`, serverResponse, {
       headers: {
@@ -405,33 +410,78 @@ useEffect(() => {
   }
 }, [collegeID]);
 
+// ------------ HANDLE VERIFICATION CONFIRM ----------------
+
+ const handleConfirm = async() => {
+  const serverData = {
+    email:account.email,
+    underVerification:true
+  }
+
+  setVerifyLoad(true)
+
+  try {
+    const response = await axios.post(`${backendUrl}/Consult/Admin-Verification`, serverData)
+    if(response.status === 200){
+      setMessageModal({open:true, message:response?.data?.message || "Your profile has been submitted for verification", severity:"success"})
+      setOpen(false)
+    }
+  } catch (error) {
+    setMessageModal({open:true, message:error.response?.data?.message || "Check Your Conntection! Try Again Later", severity:"error"})
+  } finally {
+    setVerifyLoad(true)
+  }
+ }
+
   return (
 <>
+
+{fetchLoading ? (
+  <Box className="w-full flex items-center h-full justify-center">
+  <CircularProgress size={30} className='text-black'/>
+  </Box>
+) : isSubmitted ? (
+  <>
+  <Box className="h-full w-full flex justify-center items-center flex-col gap-2">
+
+    <Typography className='text-xl font-semibold animate-pulse'>
+      Your Profile is under verification!
+    </Typography>
+
+    <Typography className='text-lg animate-pulse'>
+      It can take upto 48 hours.
+    </Typography>
+
+  </Box>
+  </>
+) : (
+  <>
+
 {/* -------------------- EDIT BUTTON & SAVE BUTTON ----------------------------- */}
 
 <Box className="h-fit border-b-2 w-[100%] sticky flex justify-between items-center pr-10 sm:pr-20 top-0 z-10 bg-white">
 
-  <Typography className='text-gray-700 font-bold text-[2rem] py-6 px-10'>
-    Profile
-  </Typography>
+<Typography className='text-gray-700 font-bold text-[2rem] py-6 px-10'>
+  Profile
+</Typography>
 
-  {!isEditing ? (
-  <Button 
-  onClick={() => setIsEditing(true)}
-  variant='outlined'
-  className=' normal-case h-10 text-nowrap bg-black text-white font-semibold rounded-[30px] hover:bg-transparent hover:text-black border-black transition-all'>
-  <span><FaUserEdit className='text-sm mr-1'/></span>Edit Profile
+{!isEditing ? (
+<Button 
+onClick={() => setIsEditing(true)}
+variant='outlined'
+className=' normal-case h-10 text-nowrap bg-black text-white font-semibold rounded-[30px] hover:bg-transparent hover:text-black border-black transition-all'>
+<span><FaUserEdit className='text-sm mr-1'/></span>Edit Profile
 </Button>
 ) : (
-  <Button 
-  onClick={() => {setIsEditing(false); handleSubmit()}} 
-  variant='outlined'
-  className=' normal-case h-10 text-nowrap bg-black text-white font-semibold rounded-[30px] hover:bg-transparent hover:text-black border-black transition-all'>
-  <span><FaSave className='text-sm mr-1'/></span>Save Changes
+<Button 
+onClick={() => {setIsEditing(false); handleSubmit()}} 
+variant='outlined'
+className=' normal-case h-10 text-nowrap bg-black text-white font-semibold rounded-[30px] hover:bg-transparent hover:text-black border-black transition-all'>
+<span><FaSave className='text-sm mr-1'/></span>Save Changes
 </Button>
 )}
 </Box>
- 
+
 {/* ----------------- PROFILE FORM --------------------------- */}
 
 <Box className="mx-6 md:mx-12">
@@ -442,7 +492,7 @@ useEffect(() => {
 
 <Box>
 <Typography className="text-black font-semibold mb-3 sm:mb-5 text-2xl sm:text-3xl mt-2 sm:mt-8">
-  Personal Information
+Personal Information
 </Typography>
 
 {/* ----------------- PROFILE PHOTOS AND GENDER ----------------------- */}
@@ -452,18 +502,18 @@ useEffect(() => {
 {/* ----------------------- PROFILE PHOTOS ------------------ */}
 
 {fetchLoading ? (
-  <Box className="w-full flex items-center h-24 justify-center">
-  <CircularProgress size={30} className='text-black'/>
-  </Box>
+<Box className="w-full flex items-center h-24 justify-center">
+<CircularProgress size={30} className='text-black'/>
+</Box>
 ) : (
-  <Box className="w-full flex gap-2 flex-wrap sm:flex-nowrap justify-around"> 
+<Box className="w-full flex gap-2 flex-wrap sm:flex-nowrap justify-around"> 
 {/* ----------------- PROFILE PHOTO 1 ---------------------- */}
 {photo1Loading ? (
-  <Box className="flex items-center h-24 w-20">
-  <CircularProgress size={30} className='text-black'/>
-  </Box>
+<Box className="flex items-center h-24 w-20">
+<CircularProgress size={30} className='text-black'/>
+</Box>
 ) : (
-  <Box>
+<Box>
 <Badge
 color="info"
 overlap="circular"
@@ -491,9 +541,9 @@ disabled={!isEditing}
 )}
 {/* ----------------- PROFILE PHOTO 2 ---------------------- */}
 {photo2Loading ? (
-  <Box className="flex items-center h-24 w-20">
-  <CircularProgress size={30} className='text-black'/>
-  </Box>
+<Box className="flex items-center h-24 w-20">
+<CircularProgress size={30} className='text-black'/>
+</Box>
 ) : (
 <Box>
 <Badge
@@ -523,9 +573,9 @@ disabled={!isEditing}
 )}
 {/* ----------------- PROFILE PHOTO 3 ---------------------- */}
 {photo3Loading ? (
-  <Box className="flex items-center h-24 w-20">
-  <CircularProgress size={30} className='text-black'/>
-  </Box>
+<Box className="flex items-center h-24 w-20">
+<CircularProgress size={30} className='text-black'/>
+</Box>
 ) : (
 <Box>
 <Badge
@@ -561,27 +611,27 @@ disabled={!isEditing}
 <Box className="w-full">
 <Typography className="text-black font-semibold mb-1">Gender</Typography>
 <FormControl fullWidth variant="outlined" className="mb-5 bg-gray-100 rounded-lg" disabled={!isEditing}>
-  <InputLabel>Gender</InputLabel>
-  <Select
-    value={profileData.consultGender}
-    onChange={handleChange}
-    name="consultGender"
-    label="Gender"
-    sx={{
-      "& .MuiOutlinedInput-root": {
-        "&.Mui-focused fieldset": {
-          borderColor: "black",
-        },
+<InputLabel>Gender</InputLabel>
+<Select
+  value={profileData.consultGender}
+  onChange={handleChange}
+  name="consultGender"
+  label="Gender"
+  sx={{
+    "& .MuiOutlinedInput-root": {
+      "&.Mui-focused fieldset": {
+        borderColor: "black",
       },
-      "& .MuiInputLabel-root.Mui-focused": {
-        color: "black",
-      },
-    }}
-  >
-    <MenuItem value="male">Male</MenuItem>
-    <MenuItem value="female">Female</MenuItem>
-    <MenuItem value="other">Other</MenuItem>
-  </Select>
+    },
+    "& .MuiInputLabel-root.Mui-focused": {
+      color: "black",
+    },
+  }}
+>
+  <MenuItem value="male">Male</MenuItem>
+  <MenuItem value="female">Female</MenuItem>
+  <MenuItem value="other">Other</MenuItem>
+</Select>
 </FormControl>
 </Box>
 </Box>
@@ -602,14 +652,14 @@ variant="outlined"
 name="name"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 
@@ -626,14 +676,14 @@ variant="outlined"
 name="consultDOB"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 </Box>
@@ -653,14 +703,14 @@ variant="outlined"
 name="consultAddress"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 
@@ -674,8 +724,8 @@ disabled={!isEditing}
 options={Countries}
 value={profileData.consultCountry}
 onChange={(event, value) => setProfileData((prev) => ({
-  ...prev,
-  consultCountry: value, 
+...prev,
+consultCountry: value, 
 }))}
 disablePortal
 PopperComponent={CustomPopper}
@@ -715,14 +765,14 @@ variant="outlined"
 name="consultPostalCode"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 </Box>
@@ -744,14 +794,14 @@ variant="outlined"
 name="consultAbout"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 
@@ -772,14 +822,14 @@ variant="outlined"
 name="consultDescription"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 
@@ -793,7 +843,7 @@ sx={{
 
 <Box>
 <Typography className="text-black font-semibold mb-3 sm:mb-5 text-2xl sm:text-3xl mt-2 sm:mt-8">
-  Contact Information
+Contact Information
 </Typography>
 
 {/* ----------------- MOBILE NUMBER and GITHUB LINK ----------------------- */}
@@ -812,14 +862,14 @@ variant="outlined"
 name="consultPhoneNumber"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 
@@ -836,14 +886,14 @@ variant="outlined"
 name="consultGitHub"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 </Box>
@@ -863,14 +913,14 @@ variant="outlined"
 name="consultLinkedin"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 
@@ -890,14 +940,14 @@ variant="outlined"
 name="consultYT"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 
@@ -914,14 +964,14 @@ variant="outlined"
 name="consultInstagram"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 </Box>
@@ -936,7 +986,7 @@ sx={{
 
 <Box>
 <Typography className="text-black font-semibold mb-3 sm:mb-5 text-2xl sm:text-3xl mt-2 sm:mt-8">
-  College & Academic Details
+College & Academic Details
 </Typography>
 
 {/* --------------- COLLEGE ID and COLLEGE NAME ----------------------- */}
@@ -944,15 +994,15 @@ sx={{
 <Box className="w-full flex gap-2 flex-wrap sm:flex-nowrap md:mt-8">
 
 {fetchLoading || collegeIDLoading ? (
-  <Box className="w-full flex gap-2 items-center h-24 flex-wrap sm:flex-nowrap justify-around">
-  <CircularProgress size={30} className='text-black'/>
-  </Box>
+<Box className="w-full flex gap-2 items-center h-24 flex-wrap sm:flex-nowrap justify-around">
+<CircularProgress size={30} className='text-black'/>
+</Box>
 ) : profileData.consultCollegeID ? (
-  <Box className="flex justify-center items-center w-full my-6">
-  <Typography className='text-green-500 font-bold text-lg sm:text-xl'>
-    College ID Uploaded <span className='inline-block'><MdDone className='font-bold'/></span>
-  </Typography>
-  </Box>
+<Box className="flex justify-center items-center w-full my-6">
+<Typography className='text-green-500 font-bold text-lg sm:text-xl'>
+  College ID Uploaded <span className='inline-block'><MdDone className='font-bold'/></span>
+</Typography>
+</Box>
 ) : (
 <Box className="flex justify-center w-full">
 <Badge
@@ -994,14 +1044,14 @@ variant="outlined"
 name="consultCollegeName"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 </Box>
@@ -1023,14 +1073,14 @@ variant="outlined"
 name="consultUniversityName"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 
@@ -1046,14 +1096,14 @@ variant="outlined"
 name="consultCollegeMajor"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 </Box>
@@ -1065,37 +1115,37 @@ sx={{
 <Box className="w-full mb-4">
 <Typography className="text-black font-semibold mb-1">Exams Given (If Any)</Typography>
 <Autocomplete
-  multiple
-  disabled={!isEditing}
-  options={Examsss}
-  value={profileData.consultExamsGiven || []}
-  onChange={(event, value) => 
-    setProfileData((prev) => ({
-      ...prev,
-      consultExamsGiven: [...value], 
-    }))
-  }
-  disablePortal
-  PopperComponent={CustomPopper}
-  className="w-full"
-  renderTags={(value, getTagProps) =>
-    value.map((option, index) => (
-      <Chip
-        key={option}
-        label={option}
-        {...getTagProps({ index })}
-        className="bg-gray-500 text-white rounded-md px-2 py-1 m-1"
-      />
-    ))
-  }
-  renderInput={(params) => (
-    <TextField
-      {...params}
-      label="Select Exams"
-      placeholder="Search Exams"
-      className="w-full bg-gray-100 rounded-lg"
+multiple
+disabled={!isEditing}
+options={Examsss}
+value={profileData.consultExamsGiven || []}
+onChange={(event, value) => 
+  setProfileData((prev) => ({
+    ...prev,
+    consultExamsGiven: [...value], 
+  }))
+}
+disablePortal
+PopperComponent={CustomPopper}
+className="w-full"
+renderTags={(value, getTagProps) =>
+  value.map((option, index) => (
+    <Chip
+      key={option}
+      label={option}
+      {...getTagProps({ index })}
+      className="bg-gray-500 text-white rounded-md px-2 py-1 m-1"
     />
-  )}
+  ))
+}
+renderInput={(params) => (
+  <TextField
+    {...params}
+    label="Select Exams"
+    placeholder="Search Exams"
+    className="w-full bg-gray-100 rounded-lg"
+  />
+)}
 />
 
 </Box>
@@ -1113,14 +1163,14 @@ variant="outlined"
 name="consultAdmissionDate"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 
@@ -1136,7 +1186,7 @@ sx={{
 
 <Box>
 <Typography className="text-black font-semibold mb-3 sm:mb-5 text-2xl sm:text-3xl mt-2 sm:mt-8">
-  Financial Information
+Financial Information
 </Typography>
 
 {/* ----------------- FEES PER SEM and MONTHLY EXPENSES -------------- */}
@@ -1155,14 +1205,14 @@ variant="outlined"
 name="consultSemFees"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 
@@ -1178,14 +1228,14 @@ variant="outlined"
 name="consultMonthlyExpenses"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 
@@ -1205,14 +1255,14 @@ variant="outlined"
 name="consultBankLoan"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 
@@ -1226,7 +1276,7 @@ sx={{
 
 <Box>
 <Typography className="text-black font-semibold mb-3 sm:mb-5 text-2xl sm:text-3xl mt-2 sm:mt-8">
-  Bank Details
+Bank Details
 </Typography>
 
 {/* --------------- ACCOUNT NUMBER & ACCOUNT HOLDER NAME --------------- */}
@@ -1245,14 +1295,14 @@ variant="outlined"
 name="consultBankAccNumber"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 
@@ -1268,14 +1318,14 @@ variant="outlined"
 name="consultBankAccHolderName"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 </Box>
@@ -1296,14 +1346,14 @@ variant="outlined"
 name="consultBankIANnumber"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 
@@ -1319,23 +1369,45 @@ variant="outlined"
 name="consultBankSwiftCode"
 className="mb-5 bg-gray-100 rounded-lg w-full"
 sx={{
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "black", 
-    },
+"& .MuiOutlinedInput-root": {
+  "&.Mui-focused fieldset": {
+    borderColor: "black", 
   },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "black", 
-  },
+},
+"& .MuiInputLabel-root.Mui-focused": {
+  color: "black", 
+},
 }} />
 </Box>
 </Box>
 
 </Box>
 
+<Box className="border-gray-300 border-[0.5px] mb-6 sm:mb-0"></Box>
+
+{/* -------------------- ADMIN VERIFICATION ------------------- */}
+{/* -------------------- ADMIN VERIFICATION ------------------- */}
+{/* -------------------- ADMIN VERIFICATION ------------------- */}
+
+<Box className="h-fit py-6 px-2 mt-4 bg-yellow-50 border-yellow-500 border-2 mb-6 flex flex-col items-center">
+
+<Typography className='text-sm text-center'>
+Your profile must be verified by our admin to access the interview package, priority DM, and all services on Grookit.
+</Typography>
+
+<Button variant='outlined'
+onClick={() => setOpen(true)}
+className='text-black border-black normal-case mt-4'>
+  Verify your profile
+</Button>
+
+</Box>
+
 {/* -------------------- PROFILE FORM END -------------------- */}
 
 </Box>
+</>
+)}
 
 {/*-------------------- Snackbar for messages ---------------------*/}
 
@@ -1349,6 +1421,41 @@ sx={{
       <b>{messageModal.message}</b>
     </Alert>
   </Snackbar>
+
+{/* ----------------------- VERIFICATION CONFIRMATION MODAL ----------------------- */}
+
+  <Modal open={open} onClose={() => setOpen(false)} aria-labelledby="verification-modal">
+    <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-lg p-6 rounded-lg w-96 text-center">
+      <Typography id="verification-modal" variant="h6" className="text-lg font-semibold mb-2">
+        Are you sure that your profile is ready for verification?
+      </Typography>
+      <Typography variant="body2" className="text-gray-600 mb-4">
+        It can take up to 48 hours for verification.
+      </Typography>
+      <div className="flex justify-between">
+        <Button 
+          variant="outlined" 
+          onClick={() => setOpen(false)} 
+          className="border-gray-400 text-gray-600 hover:bg-gray-100 px-4 py-2 rounded-md"
+        >
+          Cancel
+        </Button>
+        {verifyLoad ? (
+          <>
+          <CircularProgress size={25} className='text-black mr-8 mt-2'/>
+          </>
+        ) : (
+          <Button 
+          variant="contained" 
+          onClick={handleConfirm} 
+          className="bg-black  text-white px-4 py-2 rounded-md"
+        >
+          Confirm
+        </Button>
+        )}
+      </div>
+    </Box>
+  </Modal>
 
 </>
 

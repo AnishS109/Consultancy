@@ -108,7 +108,7 @@ const userRegisterSchema = new mongoose.Schema({
     type:String
   },
   consultCollegeName:{
-    type:String
+    type:Number
   },
   consultUniversityName:{
     type:String
@@ -176,6 +176,6 @@ const userRegisterSchema = new mongoose.Schema({
   timestamps:true
 });
 
-const UserRegisterSchema = new mongoose.model("UserDetails", userRegisterSchema);
+const StudentConsultSchema = new mongoose.model("UserDetails", userRegisterSchema);
 
-export default UserRegisterSchema;
+export default StudentConsultSchema;

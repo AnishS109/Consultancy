@@ -11,10 +11,18 @@ const userschema = new mongoose.Schema({
     type:String
   },
   type:{
-    type:String
+    type:Boolean
+  },
+  edit:{
+    type:Boolean,
+    default:false
+  },
+  delete:{
+    type:Boolean,
+    default:false
   },
 })
 
-const UserSchema = new mongoose.model("UserDetails", userschema)
+const UserSchema = new mongoose.model("AdminDetails", userschema)
 
 export default UserSchema
