@@ -7,7 +7,7 @@ const DataProvider = ({ children }) => {
   // http://localhost:5001
   // https://consultancy-admin-backend.onrender.com
 
-  const backendUrl = "https://consultancy-admin-backend.onrender.com";
+  const backendUrl = "https://consultancy-admin-backend.onrender.com"
 
   // ----------------------------------------------------------------------------
 
