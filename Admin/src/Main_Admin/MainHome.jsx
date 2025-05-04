@@ -4,9 +4,15 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Box, Button, Typography } from '@mui/material'
 
 import PersonIcon from '@mui/icons-material/Person';
+import SchoolIcon from '@mui/icons-material/School';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import LockIcon from '@mui/icons-material/Lock';
+
 import { DataContext } from '../Context/DataProvider';
 import { ConsultantCOntent } from './pages/Consultant';
+import { AddAdminContent } from './pages/AddAdmin';
+import { ChangePassContent } from './Components/ChangePass';
 
 const MainHome = () => {
 
@@ -24,11 +30,18 @@ const MainHome = () => {
     else if (activePage === "Consultants") {
       return <ConsultantCOntent />;
     }
+    else if (activePage === "Add-Admin" && account.type === true) {
+      return <AddAdminContent/>
+    }
+    else if (activePage === "Change-Password") {
+      return <ChangePassContent/>
+    }
   };
 
   return (
     <>
 <Box className="flex">
+  
 
 <Box className="h-screen sticky top-0 left-0  w-[387px] hidden md:block bg-[#f7f6f2]">
 
@@ -63,7 +76,21 @@ className={`${account.type === true ? "" : "hidden" } normal-case w-[80%] text-s
 onClick={() => navigate("/Consultants")}
 variant="outlined"
 className={`normal-case w-[80%] text-stone-700 hover:bg-[#ece6db] border-none flex justify-start gap-4 ${activePage === "Consultants" ? "bg-[#ece6db]":""}`}>
-<span><PersonIcon className="text-black"/></span><span className="text-[17px] font-semibold mt-[5px]">Consultants</span>
+<span><SchoolIcon className="text-black"/></span><span className="text-[17px] font-semibold mt-[5px]">Consultants</span>
+</Button>
+
+<Button
+onClick={() => navigate("/Add-Admin")}
+variant="outlined"
+className={`${account.type === true ? "" : "hidden" } normal-case w-[80%] text-stone-700 hover:bg-[#ece6db] border-none flex justify-start gap-4 ${activePage === "Add-Admin" ? "bg-[#ece6db]":""}`}>
+<span><AddCircleIcon className="text-black"/></span><span className="text-[17px] font-semibold mt-[5px]">Admin</span>
+</Button>
+
+<Button
+onClick={() => navigate("/Change-Password")}
+variant="outlined"
+className={`normal-case w-[80%] text-stone-700 hover:bg-[#ece6db] border-none flex justify-start gap-4 ${activePage === "Change-Password" ? "bg-[#ece6db]":""}`}>
+<span><LockIcon className="text-black"/></span><span className="text-[17px] font-semibold mt-[5px]">Change Password</span>
 </Button>
 
 </Box>

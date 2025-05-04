@@ -5,6 +5,8 @@ import DataProvider from "./Context/DataProvider";
 import Permisson from "./Main_Admin/Components/Permisson";
 import Consultant from "./Main_Admin/pages/Consultant";
 import ConsultDetails from "./Main_Admin/Components/ConsultDetails";
+import AddAdmin from "./Main_Admin/pages/AddAdmin";
+import ChangePass from "./Main_Admin/Components/ChangePass";
 
 const Login = lazy(() => import("./pages/Login"))
 const Register = lazy(() => import("./pages/Register"))
@@ -34,11 +36,16 @@ function App() {
 
           <Route path="/Admin" element={<Home/>}/>
           <Route path="/Admin/Permissions/:id" element={<Permisson/>}/>
+          <Route path="/Add-Admin" element={<AddAdmin/>}/>
 
         {/* --------------- BOTH ADMIN ROUTES ----------------- */}
 
           <Route path="/Consultants" element={<Consultant/>}/>
           <Route path="/Consultant/Details/:id" element={<ConsultDetails/>}/>
+
+        {/* ----------------------- SUB-ADMIN ROUTES ---------------------- */}
+
+          <Route path="/Change-Password" element={<ChangePass/>}/>
 
         </Routes>
         </Suspense>

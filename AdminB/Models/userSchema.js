@@ -17,7 +17,7 @@ const userschema = new mongoose.Schema({
     type:Boolean,
     default:false
   },
-  delete:{
+  deletePermission:{
     type:Boolean,
     default:false
   },
